@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package llmoperator.files.server.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/llm-operator/file-manager/api/v1";
+
+// The API specification fllows OpenAPI API specification (https://platform.openai.com/docs/api-reference/files).
+
+message CreateFileRequest {
+}
+
+message File {
+}
+
+service FilesService {
+  rpc CreateFile(CreateFileRequest) returns (File) {
+		option (google.api.http) = {
+			post: "/v1/files"
+			body: "*"
+		};
+	}
+}
