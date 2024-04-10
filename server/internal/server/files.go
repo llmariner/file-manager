@@ -87,9 +87,6 @@ func (s *S) CreateFile(
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	//http.Header().Set("Content-Type", "application/json")
-	// Return the created file.
-	// return toFileProto(f), nil
 }
 
 // GetFileContent gets a file content.
@@ -101,33 +98,6 @@ func (s *S) GetFileContent(
 	http.Error(w, "Not implemented", http.StatusInternalServerError)
 }
 
-/*
-func (s *S) CreateFile(
-	ctx context.Context,
-	req *v1.CreateFileRequest,
-) (*v1.File, error) {
-	if len(req.File) == 0 {
-		return nil, status.Error(codes.InvalidArgument, "file is required")
-	}
-
-	fileID := newFileID()
-
-	f, err := s.store.CreateFile(store.FileSpec{
-		Key: store.FileKey{
-			FileID:   fileID,
-			TenantID: fakeTenantID,
-		},
-		Purpose: req.Purpose,
-		// TODO(kenji): Fill Filename.
-		Bytes: int64(len(req.File)),
-	})
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "create file: %s", err)
-	}
-
-	return toFileProto(f), nil
-}
-*/
 // ListFiles lists files.
 func (s *S) ListFiles(
 	ctx context.Context,
