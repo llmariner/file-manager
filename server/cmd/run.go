@@ -70,6 +70,22 @@ func run(ctx context.Context, c *config.Config) error {
 		return err
 	}
 
+	s := server.New(st)
+	createFile := runtime.MustPattern(runtime.NewPattern(
+		1,
+		[]int{2, 0, 2, 1},
+		[]string{"v1", "files"},
+		"",
+	))
+	mux.Handle("POST", createFile, s.CreateFile)
+	getFileContent := runtime.MustPattern(runtime.NewPattern(
+		1,
+		[]int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3},
+		[]string{"v1", "files", "id", "content"},
+		"",
+	))
+	mux.Handle("Get", getFileContent, s.GetFileContent)
+
 	errCh := make(chan error)
 	go func() {
 		log.Printf("Starting HTTP server on port %d", c.HTTPPort)
@@ -77,7 +93,6 @@ func run(ctx context.Context, c *config.Config) error {
 	}()
 
 	go func() {
-		s := server.New(st)
 		errCh <- s.Run(c.GRPCPort)
 	}()
 
