@@ -15,6 +15,8 @@ import (
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 const flagConfig = "config"
@@ -45,7 +47,13 @@ var runCmd = &cobra.Command{
 }
 
 func run(ctx context.Context, c *config.Config) error {
-	dbInst, err := db.OpenDB(c.Database)
+	var dbInst *gorm.DB
+	var err error
+	if c.Debug.Standalone {
+		dbInst, err = gorm.Open(sqlite.Open(c.Debug.SqlitePath), &gorm.Config{})
+	} else {
+		dbInst, err = db.OpenDB(c.Database)
+	}
 	if err != nil {
 		return err
 	}
