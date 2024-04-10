@@ -4,6 +4,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// File represents a file.
 type File struct {
 	gorm.Model
 
@@ -49,7 +50,7 @@ func (s *S) CreateFile(spec FileSpec) (*File, error) {
 	return f, nil
 }
 
-// GeteFile returns a file by file ID and tenant ID.
+// GetFile returns a file by file ID and tenant ID.
 func (s *S) GetFile(k FileKey) (*File, error) {
 	var f File
 	if err := s.db.Where("file_id = ? AND tenant_id = ?", k.FileID, k.TenantID).Take(&f).Error; err != nil {
