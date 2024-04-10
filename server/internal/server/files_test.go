@@ -18,32 +18,36 @@ func TestFiles(t *testing.T) {
 	srv := New(st)
 	ctx := context.Background()
 
-	f, err := srv.CreateFile(ctx, &v1.CreateFileRequest{
-		File:    []byte("file-content"),
-		Purpose: purposeFineTune,
+	const fileID = "f0"
+
+	_, err := st.CreateFile(store.FileSpec{
+		Key: store.FileKey{
+			FileID:   fileID,
+			TenantID: fakeTenantID,
+		},
+		Filename: "filename0",
+		Purpose:  "purpose0",
 	})
 	assert.NoError(t, err)
-	assert.Equal(t, purposeFineTune, f.Purpose)
-	assert.Equal(t, int64(12), f.Bytes)
 
 	getResp, err := srv.GetFile(ctx, &v1.GetFileRequest{
-		Id: f.Id,
+		Id: fileID,
 	})
 	assert.NoError(t, err)
-	assert.Equal(t, f.Id, getResp.Id)
+	assert.Equal(t, fileID, getResp.Id)
 
 	listResp, err := srv.ListFiles(ctx, &v1.ListFilesRequest{})
 	assert.NoError(t, err)
 	assert.Len(t, listResp.Data, 1)
-	assert.Equal(t, f.Id, listResp.Data[0].Id)
+	assert.Equal(t, fileID, listResp.Data[0].Id)
 
 	_, err = srv.DeleteFile(ctx, &v1.DeleteFileRequest{
-		Id: f.Id,
+		Id: fileID,
 	})
 	assert.NoError(t, err)
 
 	_, err = srv.GetFile(ctx, &v1.GetFileRequest{
-		Id: f.Id,
+		Id: fileID,
 	})
 	assert.Error(t, err)
 	assert.Equal(t, codes.NotFound, status.Code(err))

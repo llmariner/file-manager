@@ -44,36 +44,6 @@
         "tags": [
           "FilesService"
         ]
-      },
-      "post": {
-        "operationId": "FilesService_CreateFile",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1File"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateFileRequest"
-            }
-          }
-        ],
-        "tags": [
-          "FilesService"
-        ]
       }
     },
     "/v1/files/{id}": {
@@ -133,36 +103,6 @@
           "FilesService"
         ]
       }
-    },
-    "/v1/files/{id}/content": {
-      "delete": {
-        "operationId": "FilesService_GetFileContent",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetFileContentResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "FilesService"
-        ]
-      }
     }
   },
   "definitions": {
@@ -190,18 +130,6 @@
           "items": {
             "$ref": "#/definitions/protobufAny"
           }
-        }
-      }
-    },
-    "v1CreateFileRequest": {
-      "type": "object",
-      "properties": {
-        "file": {
-          "type": "string",
-          "format": "byte"
-        },
-        "purpose": {
-          "type": "string"
         }
       }
     },
@@ -241,16 +169,6 @@
         },
         "purpose": {
           "type": "string"
-        }
-      }
-    },
-    "v1GetFileContentResponse": {
-      "type": "object",
-      "properties": {
-        "content": {
-          "type": "string",
-          "format": "byte",
-          "description": "TODO(kenji): Revisit.  This does not follow the spec."
         }
       }
     },

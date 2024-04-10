@@ -11,11 +11,6 @@ option go_package = "github.com/llm-operator/file-manager/api/v1";
 // TODO(kenji): Some of the API endpoints will not be implemented efficiently. Consider providing
 // an extra API for just managing the metadata.
 
-// TODO(kenji): Fix this. This currently does not follow the spec.
-message CreateFileRequest {
-  bytes file = 1;
-  string purpose = 2;
-}
 
 message File {
   string id = 1;
@@ -49,22 +44,8 @@ message DeleteFileResponse {
   bool deleted = 3;
 }
 
-message GetFileContentRequest {
-  string id = 1;
-}
-
-message GetFileContentResponse {
-  // TODO(kenji): Revisit.  This does not follow the spec.
-  bytes content = 1;
-}
-
 service FilesService {
-  rpc CreateFile(CreateFileRequest) returns (File) {
-    option (google.api.http) = {
-      post: "/v1/files"
-      body: "*"
-    };
-  }
+  // File upload and download are implemented without gRPC gateway.
 
   rpc ListFiles(ListFilesRequest) returns (ListFilesResponse) {
     option (google.api.http) = {
@@ -81,12 +62,6 @@ service FilesService {
   rpc DeleteFile(DeleteFileRequest) returns (DeleteFileResponse) {
     option (google.api.http) = {
       delete: "/v1/files/{id}"
-    };
-  }
-
-  rpc GetFileContent(GetFileContentRequest) returns (GetFileContentResponse) {
-    option (google.api.http) = {
-      delete: "/v1/files/{id}/content"
     };
   }
 }

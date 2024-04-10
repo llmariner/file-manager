@@ -2,7 +2,12 @@ package server
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
+	"io"
+	"net/http"
+	"strings"
 
 	"github.com/google/uuid"
 	v1 "github.com/llm-operator/file-manager/api/v1"
@@ -19,18 +24,90 @@ const (
 	purposeAssistants = "assistants"
 )
 
+// CreateFile creates a file.
+func (s *S) CreateFile(
+	w http.ResponseWriter,
+	req *http.Request,
+	pathParams map[string]string,
+) {
+	if err := req.ParseMultipartForm(10 << 20); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	purpose := req.FormValue("purpose")
+	if purpose == "" {
+		http.Error(w, "purpose is required", http.StatusBadRequest)
+		return
+	}
+	if err := validatePurpose(purpose); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Read the file content.
+	file, header, err := req.FormFile("file")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// TODO(kenji): Write to a object store.
+	buf := strings.Builder{}
+	if _, err := io.Copy(&buf, file); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	contents := buf.String()
+	fmt.Printf("Received a file (%d bytes)\n", len(contents))
+
+	fileID := newFileID()
+	f, err := s.store.CreateFile(store.FileSpec{
+		Key: store.FileKey{
+			FileID:   fileID,
+			TenantID: fakeTenantID,
+		},
+		Purpose:  purpose,
+		Filename: header.Filename,
+		Bytes:    int64(len(contents)),
+	})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	fj := toFileJson(f)
+	b, err := json.Marshal(fj)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusCreated)
+	if _, err := w.Write(b); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	//http.Header().Set("Content-Type", "application/json")
+	// Return the created file.
+	// return toFileProto(f), nil
+}
+
+// GetFileContent gets a file content.
+func (s *S) GetFileContent(
+	w http.ResponseWriter,
+	req *http.Request,
+	pathParams map[string]string,
+) {
+	http.Error(w, "Not implemented", http.StatusInternalServerError)
+}
+
+/*
 func (s *S) CreateFile(
 	ctx context.Context,
 	req *v1.CreateFileRequest,
 ) (*v1.File, error) {
 	if len(req.File) == 0 {
 		return nil, status.Error(codes.InvalidArgument, "file is required")
-	}
-	if req.Purpose == "" {
-		return nil, status.Error(codes.InvalidArgument, "purpose is required")
-	}
-	if err := validatePurpose(req.Purpose); err != nil {
-		return nil, err
 	}
 
 	fileID := newFileID()
@@ -50,7 +127,7 @@ func (s *S) CreateFile(
 
 	return toFileProto(f), nil
 }
-
+*/
 // ListFiles lists files.
 func (s *S) ListFiles(
 	ctx context.Context,
@@ -139,6 +216,26 @@ func validatePurpose(p string) error {
 func toFileProto(f *store.File) *v1.File {
 	return &v1.File{
 		Id:        f.FileID,
+		Bytes:     f.Bytes,
+		CreatedAt: f.CreatedAt.UTC().Unix(),
+		Filename:  f.Filename,
+		Object:    "file",
+		Purpose:   f.Purpose,
+	}
+}
+
+type fileJSON struct {
+	ID        string `json:"id"`
+	Bytes     int64  `json:"bytes"`
+	CreatedAt int64  `json:"created_at"`
+	Filename  string `json:"filename"`
+	Object    string `json:"object"`
+	Purpose   string `json:"purpose"`
+}
+
+func toFileJson(f *store.File) *fileJSON {
+	return &fileJSON{
+		ID:        f.FileID,
 		Bytes:     f.Bytes,
 		CreatedAt: f.CreatedAt.UTC().Unix(),
 		Filename:  f.Filename,
