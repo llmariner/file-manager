@@ -7,6 +7,9 @@ import "google/api/annotations.proto";
 option go_package = "github.com/llm-operator/file-manager/api/v1";
 
 // The API specification fllows OpenAPI API specification (https://platform.openai.com/docs/api-reference/files).
+//
+// TODO(kenji): Some of the API endpoints will not be implemented efficiently. Consider providing
+// an extra API for just managing the metadata.
 
 message CreateFileRequest {
   string file = 1;
