@@ -13,6 +13,8 @@ type File struct {
 	Filename string
 	Purpose  string `gorm:"index:idx_file_tenant_id_purpose"`
 
+	Bytes int64
+
 	// TODO(kenji): Add a file location. The actual file content is stored outside of the SQL database.
 }
 
@@ -28,6 +30,7 @@ type FileSpec struct {
 
 	Filename string
 	Purpose  string
+	Bytes    int64
 }
 
 // CreateFile creates a file.
@@ -38,6 +41,7 @@ func (s *S) CreateFile(spec FileSpec) (*File, error) {
 
 		Filename: spec.Filename,
 		Purpose:  spec.Purpose,
+		Bytes:    spec.Bytes,
 	}
 	if err := s.db.Create(f).Error; err != nil {
 		return nil, err
