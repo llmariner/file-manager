@@ -11,6 +11,7 @@ option go_package = "github.com/llm-operator/file-manager/api/v1";
 // TODO(kenji): Some of the API endpoints will not be implemented efficiently. Consider providing
 // an extra API for just managing the metadata.
 
+// TODO(kenji): Fix this. This currently does not follow the spec.
 message CreateFileRequest {
   bytes file = 1;
   string purpose = 2;
