@@ -12,7 +12,7 @@ option go_package = "github.com/llm-operator/file-manager/api/v1";
 // an extra API for just managing the metadata.
 
 message CreateFileRequest {
-  string file = 1;
+  bytes file = 1;
   string purpose = 2;
 }
 
@@ -26,7 +26,7 @@ message File {
 }
 
 message ListFilesRequest {
-  string purpse = 1;
+  string purpose = 1;
 }
 
 message ListFilesResponse {
