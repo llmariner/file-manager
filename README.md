@@ -8,3 +8,33 @@ File manager
 - Support the `standalone` mode for easy debug (https://github.com/llm-operator/job-manager/blob/main/dispatcher/internal/config/config.go#L15)
 - Include `TenantID` in each file record so that we can later implement tenant isolation.
 - Use OpenAI python client to verify the implementation.
+
+## Running Locally
+
+```bash
+make build-server
+./bin/server run --config config.yaml
+```
+
+`config.yaml` has the following content:
+
+```yaml
+httpPort: 8080
+grpcPort: 8081
+
+debug:
+  standalone: true
+  sqlitePath: /tmp/file_manager.db
+```
+
+You can then connect to the DB.
+
+```bash
+sqlite3 /tmp/file_manager.db
+```
+
+You can then hit the endpoint.
+
+```bash
+curl http://localhost:8080/v1/files
+```

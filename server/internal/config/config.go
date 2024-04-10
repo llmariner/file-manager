@@ -8,12 +8,20 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// DebugConfig is the debug configuration.
+type DebugConfig struct {
+	Standalone bool   `yaml:"standalone"`
+	SqlitePath string `yaml:"sqlitePath"`
+}
+
 // Config is the configuration.
 type Config struct {
 	GRPCPort int `yaml:"grpcPort"`
 	HTTPPort int `yaml:"httpPort"`
 
 	Database db.Config `yaml:"database"`
+
+	Debug DebugConfig `yaml:"debug"`
 }
 
 // Validate validates the configuration.
@@ -24,9 +32,17 @@ func (c *Config) Validate() error {
 	if c.HTTPPort <= 0 {
 		return fmt.Errorf("httpPort must be greater than 0")
 	}
-	if err := c.Database.Validate(); err != nil {
-		return fmt.Errorf("database: %s", err)
+
+	if c.Debug.Standalone {
+		if c.Debug.SqlitePath == "" {
+			return fmt.Errorf("sqlite path must be set")
+		}
+	} else {
+		if err := c.Database.Validate(); err != nil {
+			return fmt.Errorf("database: %s", err)
+		}
 	}
+
 	return nil
 }
 
