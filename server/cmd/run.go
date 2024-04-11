@@ -11,6 +11,7 @@ import (
 	"github.com/llm-operator/file-manager/common/pkg/db"
 	"github.com/llm-operator/file-manager/common/pkg/store"
 	"github.com/llm-operator/file-manager/server/internal/config"
+	"github.com/llm-operator/file-manager/server/internal/s3"
 	"github.com/llm-operator/file-manager/server/internal/server"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
@@ -70,7 +71,14 @@ func run(ctx context.Context, c *config.Config) error {
 		return err
 	}
 
-	s := server.New(st)
+	var s3Client server.S3Client
+	if c.Debug.Standalone {
+		s3Client = &server.NoopS3Client{}
+	} else {
+		s3c := c.ObjectStore.S3
+		s3Client = s3.NewClient(s3c.EndpointURL, s3c.Bucket)
+	}
+	s := server.New(st, s3Client)
 	createFile := runtime.MustPattern(runtime.NewPattern(
 		1,
 		[]int{2, 0, 2, 1},

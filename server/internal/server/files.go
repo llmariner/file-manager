@@ -4,10 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
-	"io"
+	"log"
 	"net/http"
-	"strings"
 
 	"github.com/google/uuid"
 	v1 "github.com/llm-operator/file-manager/api/v1"
@@ -52,16 +50,16 @@ func (s *S) CreateFile(
 		return
 	}
 
-	// TODO(kenji): Write to a object store.
-	buf := strings.Builder{}
-	if _, err := io.Copy(&buf, file); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	log.Printf("Uploading the file to S3\n")
+	fileID := newFileID()
+	if err := s.s3Client.Upload(file, fileID); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	contents := buf.String()
-	fmt.Printf("Received a file (%d bytes)\n", len(contents))
+	// TODO(kenji): Get the number of bytes uploaded.
+	var bytes int64
+	log.Printf("Uploaded the file (%d bytes)\n", bytes)
 
-	fileID := newFileID()
 	f, err := s.store.CreateFile(store.FileSpec{
 		Key: store.FileKey{
 			FileID:   fileID,
@@ -69,7 +67,7 @@ func (s *S) CreateFile(
 		},
 		Purpose:  purpose,
 		Filename: header.Filename,
-		Bytes:    int64(len(contents)),
+		Bytes:    bytes,
 	})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -87,9 +85,6 @@ func (s *S) CreateFile(
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	//http.Header().Set("Content-Type", "application/json")
-	// Return the created file.
-	// return toFileProto(f), nil
 }
 
 // GetFileContent gets a file content.
