@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net"
 
@@ -11,10 +12,24 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
+// S3Client is an interface for an S3 client.
+type S3Client interface {
+	Upload(r io.Reader, key string) error
+}
+
+// NoopS3Client is a no-op S3 client.
+type NoopS3Client struct{}
+
+// Upload is a no-op implementation of Upload.
+func (n *NoopS3Client) Upload(r io.Reader, key string) error {
+	return nil
+}
+
 // New creates a server.
-func New(store *store.S) *S {
+func New(store *store.S, s3Client S3Client) *S {
 	return &S{
-		store: store,
+		store:    store,
+		s3Client: s3Client,
 	}
 }
 
@@ -24,7 +39,8 @@ type S struct {
 
 	srv *grpc.Server
 
-	store *store.S
+	store    *store.S
+	s3Client S3Client
 }
 
 // Run starts the gRPC server.
