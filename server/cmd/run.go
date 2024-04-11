@@ -75,8 +75,7 @@ func run(ctx context.Context, c *config.Config) error {
 	if c.Debug.Standalone {
 		s3Client = &server.NoopS3Client{}
 	} else {
-		s3c := c.ObjectStore.S3
-		s3Client = s3.NewClient(s3c.EndpointURL, s3c.Bucket)
+		s3Client = s3.NewClient(c.ObjectStore.S3)
 	}
 	s := server.New(st, s3Client)
 	createFile := runtime.MustPattern(runtime.NewPattern(

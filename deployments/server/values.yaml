@@ -5,6 +5,7 @@ objectStore:
   s3:
     endpointUrl:
     bucket:
+    pathPrefix: files
 
 awsSecret:
   name:

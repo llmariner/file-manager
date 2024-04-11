@@ -12,6 +12,7 @@ import (
 type S3Config struct {
 	EndpointURL string `yaml:"endpointUrl"`
 	Bucket      string `yaml:"bucket"`
+	PathPrefix  string `yaml:"pathPrefix"`
 }
 
 // ObjectStoreConfig is the object store configuration.
