@@ -1,35 +1,38 @@
 package s3
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/llm-operator/file-manager/server/internal/config"
 )
 
 // NewClient returns a new S3 client.
-func NewClient(endpointURL, bucket string) *Client {
+func NewClient(c config.S3Config) *Client {
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
 	}))
 	conf := &aws.Config{
-		Endpoint: aws.String(endpointURL),
+		Endpoint: aws.String(c.EndpointURL),
 		Region:   aws.String("dummy"),
 		// This is needed as the minio server does not support the virtual host style.
 		S3ForcePathStyle: aws.Bool(true),
 	}
 	return &Client{
 		svc:    s3.New(sess, conf),
-		bucket: bucket,
+		bucket: c.Bucket,
 	}
 }
 
 // Client is a client for S3.
 type Client struct {
-	svc    *s3.S3
-	bucket string
+	svc        *s3.S3
+	bucket     string
+	pathPrefix string
 }
 
 // Upload uploads the data that buf contains to a S3 object.
@@ -37,7 +40,7 @@ func (c *Client) Upload(r io.Reader, key string) error {
 	uploader := s3manager.NewUploaderWithClient(c.svc)
 	_, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(c.bucket),
-		Key:    aws.String(key),
+		Key:    aws.String(fmt.Sprintf("%s/%s", c.pathPrefix, key)),
 		Body:   r,
 	})
 	if err != nil {
