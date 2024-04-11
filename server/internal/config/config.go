@@ -28,6 +28,9 @@ func (c *ObjectStoreConfig) Validate() error {
 	if c.S3.Bucket == "" {
 		return fmt.Errorf("s3 bucket must be set")
 	}
+	if c.S3.PathPrefix == "" {
+		return fmt.Errorf("s3 path prefix must be set")
+	}
 	return nil
 }
 
