@@ -16,7 +16,7 @@ type File struct {
 
 	Bytes int64
 
-	// TODO(kenji): Add a file location. The actual file content is stored outside of the SQL database.
+	ObjectStorePath string
 }
 
 // FileKey represents a file key.
@@ -32,6 +32,8 @@ type FileSpec struct {
 	Filename string
 	Purpose  string
 	Bytes    int64
+
+	ObjectStorePath string
 }
 
 // CreateFile creates a file.
@@ -43,6 +45,8 @@ func (s *S) CreateFile(spec FileSpec) (*File, error) {
 		Filename: spec.Filename,
 		Purpose:  spec.Purpose,
 		Bytes:    spec.Bytes,
+
+		ObjectStorePath: spec.ObjectStorePath,
 	}
 	if err := s.db.Create(f).Error; err != nil {
 		return nil, err

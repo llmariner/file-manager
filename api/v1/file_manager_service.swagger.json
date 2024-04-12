@@ -7,6 +7,9 @@
   "tags": [
     {
       "name": "FilesService"
+    },
+    {
+      "name": "FilesInternalService"
     }
   ],
   "consumes": [
@@ -168,6 +171,14 @@
           "type": "string"
         },
         "purpose": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetFilePathResponse": {
+      "type": "object",
+      "properties": {
+        "path": {
           "type": "string"
         }
       }

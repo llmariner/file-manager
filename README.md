@@ -12,6 +12,7 @@ make build-server
 ```yaml
 httpPort: 8080
 grpcPort: 8081
+internalGrpcPort: 8082
 
 debug:
   standalone: true

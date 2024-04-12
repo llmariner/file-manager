@@ -26,10 +26,11 @@ func (n *NoopS3Client) Upload(r io.Reader, key string) error {
 }
 
 // New creates a server.
-func New(store *store.S, s3Client S3Client) *S {
+func New(store *store.S, s3Client S3Client, pathPrefix string) *S {
 	return &S{
-		store:    store,
-		s3Client: s3Client,
+		store:      store,
+		s3Client:   s3Client,
+		pathPrefix: pathPrefix,
 	}
 }
 
@@ -41,6 +42,8 @@ type S struct {
 
 	store    *store.S
 	s3Client S3Client
+
+	pathPrefix string
 }
 
 // Run starts the gRPC server.

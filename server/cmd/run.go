@@ -72,12 +72,14 @@ func run(ctx context.Context, c *config.Config) error {
 	}
 
 	var s3Client server.S3Client
+	var pathPrefix string
 	if c.Debug.Standalone {
 		s3Client = &server.NoopS3Client{}
 	} else {
 		s3Client = s3.NewClient(c.ObjectStore.S3)
+		pathPrefix = c.ObjectStore.PathPrefix
 	}
-	s := server.New(st, s3Client)
+	s := server.New(st, s3Client, pathPrefix)
 	createFile := runtime.MustPattern(runtime.NewPattern(
 		1,
 		[]int{2, 0, 2, 1},
@@ -101,6 +103,11 @@ func run(ctx context.Context, c *config.Config) error {
 
 	go func() {
 		errCh <- s.Run(c.GRPCPort)
+	}()
+
+	go func() {
+		s := server.NewInternal(st)
+		errCh <- s.Run(c.InternalGRPCPort)
 	}()
 
 	return <-errCh

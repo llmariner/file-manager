@@ -1,7 +1,6 @@
 package s3
 
 import (
-	"fmt"
 	"io"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -30,9 +29,8 @@ func NewClient(c config.S3Config) *Client {
 
 // Client is a client for S3.
 type Client struct {
-	svc        *s3.S3
-	bucket     string
-	pathPrefix string
+	svc    *s3.S3
+	bucket string
 }
 
 // Upload uploads the data that buf contains to a S3 object.
@@ -40,7 +38,7 @@ func (c *Client) Upload(r io.Reader, key string) error {
 	uploader := s3manager.NewUploaderWithClient(c.svc)
 	_, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(c.bucket),
-		Key:    aws.String(fmt.Sprintf("%s/%s", c.pathPrefix, key)),
+		Key:    aws.String(key),
 		Body:   r,
 	})
 	if err != nil {
