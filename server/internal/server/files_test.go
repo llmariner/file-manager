@@ -20,7 +20,7 @@ func TestFiles(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st, &NoopS3Client{})
+	srv := New(st, &NoopS3Client{}, "pathPrefix")
 	ctx := context.Background()
 
 	const fileID = "f0"
@@ -66,7 +66,7 @@ func TestCreateFile(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st, &NoopS3Client{})
+	srv := New(st, &NoopS3Client{}, "pathPrefix")
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		srv.CreateFile(w, r, nil)
@@ -107,4 +107,29 @@ func TestCreateFile(t *testing.T) {
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, fj.ID, resp.Id)
+}
+
+func TestGetFilePath(t *testing.T) {
+	st, tearDown := store.NewTest(t)
+	defer tearDown()
+
+	const fileID = "f0"
+
+	_, err := st.CreateFile(store.FileSpec{
+		Key: store.FileKey{
+			FileID:   fileID,
+			TenantID: fakeTenantID,
+		},
+		Filename:        "filename0",
+		Purpose:         "purpose0",
+		ObjectStorePath: "path0",
+	})
+	assert.NoError(t, err)
+
+	isrv := NewInternal(st)
+	got, err := isrv.GetFilePath(context.Background(), &v1.GetFilePathRequest{
+		Id: fileID,
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, "path0", got.Path)
 }

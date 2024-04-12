@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -52,7 +53,8 @@ func (s *S) CreateFile(
 
 	log.Printf("Uploading the file to S3\n")
 	fileID := newFileID()
-	if err := s.s3Client.Upload(file, fileID); err != nil {
+	path := s.filePath(fileID)
+	if err := s.s3Client.Upload(file, path); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -68,6 +70,8 @@ func (s *S) CreateFile(
 		Purpose:  purpose,
 		Filename: header.Filename,
 		Bytes:    bytes,
+
+		ObjectStorePath: path,
 	})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -134,7 +138,7 @@ func (s *S) GetFile(
 		return nil, status.Error(codes.InvalidArgument, "id is required")
 	}
 
-	m, err := s.store.GetFile(store.FileKey{
+	f, err := s.store.GetFile(store.FileKey{
 		FileID:   req.Id,
 		TenantID: fakeTenantID,
 	})
@@ -144,7 +148,7 @@ func (s *S) GetFile(
 		}
 		return nil, status.Errorf(codes.Internal, "get file: %s", err)
 	}
-	return toFileProto(m), nil
+	return toFileProto(f), nil
 }
 
 // DeleteFile deletes a file.
@@ -170,6 +174,34 @@ func (s *S) DeleteFile(
 		Object:  "file",
 		Deleted: true,
 	}, nil
+}
+
+// GetFilePath gets a file path.
+func (s *IS) GetFilePath(
+	ctx context.Context,
+	req *v1.GetFilePathRequest,
+) (*v1.GetFilePathResponse, error) {
+	if req.Id == "" {
+		return nil, status.Error(codes.InvalidArgument, "id is required")
+	}
+
+	f, err := s.store.GetFile(store.FileKey{
+		FileID:   req.Id,
+		TenantID: fakeTenantID,
+	})
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, status.Errorf(codes.NotFound, "file %q not found", req.Id)
+		}
+		return nil, status.Errorf(codes.Internal, "get file: %s", err)
+	}
+	return &v1.GetFilePathResponse{
+		Path: f.ObjectStorePath,
+	}, nil
+}
+
+func (s *S) filePath(key string) string {
+	return fmt.Sprintf("%s/%s", s.pathPrefix, key)
 }
 
 func validatePurpose(p string) error {

@@ -8,6 +8,7 @@ data:
   config.yaml: |
     httpPort: {{ .Values.httpPort }}
     grpcPort: {{ .Values.grpcPort }}
+    internalGrpcPort: {{ .Values.internalGrpcPort }}
     objectStore:
       s3:
         endpointUrl: {{ .Values.objectStore.s3.endpointUrl }}

@@ -65,3 +65,16 @@ service FilesService {
     };
   }
 }
+
+message GetFilePathRequest {
+  string id = 1;
+}
+
+message GetFilePathResponse {
+  string path = 1;
+}
+
+service FilesInternalService {
+  rpc GetFilePath(GetFilePathRequest) returns (GetFilePathResponse) {
+  }
+}
