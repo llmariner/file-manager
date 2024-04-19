@@ -85,7 +85,8 @@ func TestCreateFile(t *testing.T) {
 	_, err = fw.Write([]byte(purposeFineTune))
 	assert.NoError(t, err)
 
-	w.Close()
+	err = w.Close()
+	assert.NoError(t, err)
 
 	req, err := http.NewRequest("POST", "v1/files", &b)
 	assert.NoError(t, err)
