@@ -63,8 +63,8 @@ jobs:
         push: true
         platforms: linux/amd64,linux/arm64
         tags: |
-          public.ecr.aws/v8n3t7y5/llm-operator/file-manager:${{ needs.update-tag.outputs.new_tag }}
-          public.ecr.aws/v8n3t7y5/llm-operator/file-manager:latest
+          public.ecr.aws/v8n3t7y5/llm-operator/file-manager-server:${{ needs.update-tag.outputs.new_tag }}
+          public.ecr.aws/v8n3t7y5/llm-operator/file-manager-server:latest
 
   publish-helm-chart:
     runs-on: ubuntu-latest
