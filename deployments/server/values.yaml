@@ -2,30 +2,36 @@ httpPort: 8080
 grpcPort: 8081
 internalGrpcPort: 8082
 
+global:
+  objectStore:
+    s3:
+      endpointUrl:
+      bucket:
+
+  awsSecret:
+    name:
+    accessKeyIdKey:
+    secretAccessKeyKey:
+
+  ingress:
+    ingressClassName:
+
+  database:
+    host:
+    port:
+    username:
+    passwordEnvName:
+
 objectStore:
   s3:
-    endpointUrl:
-    bucket:
     pathPrefix: files
 
-awsSecret:
-  name:
-  accessKeyIdKey:
-  secretAccessKeyKey:
-
 database:
-  host:
-  port: 5432
   database: file_manager
-  username:
-  passwordEnvName: DB_PASSWORD
 
 replicaCount: 1
 image:
   repository: public.ecr.aws/v8n3t7y5/llm-operator/file-manager
   pullPolicy: IfNotPresent
-
-ingress:
-  ingressClassName:
 
 version:
