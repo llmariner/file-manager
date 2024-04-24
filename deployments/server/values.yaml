@@ -1,8 +1,14 @@
-httpPort: 8080
-grpcPort: 8081
-internalGrpcPort: 8082
-
 global:
+  database:
+    host:
+    port:
+    username:
+    passwordEnvName:
+
+  databaseSecret:
+    name:
+    key:
+
   objectStore:
     s3:
       endpointUrl:
@@ -16,18 +22,16 @@ global:
   ingress:
     ingressClassName:
 
-  database:
-    host:
-    port:
-    username:
-    passwordEnvName:
+httpPort: 8080
+grpcPort: 8081
+internalGrpcPort: 8082
+
+database:
+  database: file_manager
 
 objectStore:
   s3:
     pathPrefix: files
-
-database:
-  database: file_manager
 
 replicaCount: 1
 image:
