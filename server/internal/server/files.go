@@ -47,9 +47,16 @@ func (s *S) CreateFile(
 	// Read the file content.
 	file, header, err := req.FormFile("file")
 	if err != nil {
+		if err == http.ErrMissingFile {
+			http.Error(w, "file is required", http.StatusBadRequest)
+			return
+		}
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	defer func() {
+		_ = file.Close()
+	}()
 
 	log.Printf("Uploading the file to S3\n")
 	fileID := newFileID()
@@ -58,9 +65,7 @@ func (s *S) CreateFile(
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// TODO(kenji): Get the number of bytes uploaded.
-	var bytes int64
-	log.Printf("Uploaded the file (%d bytes)\n", bytes)
+	log.Printf("Uploaded the file (%d bytes)\n", header.Size)
 
 	f, err := s.store.CreateFile(store.FileSpec{
 		Key: store.FileKey{
@@ -69,7 +74,7 @@ func (s *S) CreateFile(
 		},
 		Purpose:  purpose,
 		Filename: header.Filename,
-		Bytes:    bytes,
+		Bytes:    header.Size,
 
 		ObjectStorePath: path,
 	})

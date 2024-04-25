@@ -29,4 +29,8 @@ You can then hit the endpoint.
 
 ```bash
 curl http://localhost:8080/v1/files
+
+curl http://localhost:8080/v1/files \
+  --form purpose="fine-tune" \
+  --form file="@mydata.jsonl"
 ```
