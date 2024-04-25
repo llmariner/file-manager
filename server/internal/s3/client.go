@@ -10,6 +10,10 @@ import (
 	"github.com/llm-operator/file-manager/server/internal/config"
 )
 
+const (
+	partMiBs int64 = 128
+)
+
 // NewClient returns a new S3 client.
 func NewClient(c config.S3Config) *Client {
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
@@ -35,7 +39,9 @@ type Client struct {
 
 // Upload uploads the data that buf contains to a S3 object.
 func (c *Client) Upload(r io.Reader, key string) error {
-	uploader := s3manager.NewUploaderWithClient(c.svc)
+	uploader := s3manager.NewUploaderWithClient(c.svc, func(u *s3manager.Uploader) {
+		u.PartSize = partMiBs * 1024 * 1024
+	})
 	_, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(c.bucket),
 		Key:    aws.String(key),
