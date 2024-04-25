@@ -8,11 +8,11 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	v1 "github.com/llm-operator/file-manager/api/v1"
-	"github.com/llm-operator/file-manager/common/pkg/db"
-	"github.com/llm-operator/file-manager/common/pkg/store"
 	"github.com/llm-operator/file-manager/server/internal/config"
+	"github.com/llm-operator/file-manager/server/internal/db"
 	"github.com/llm-operator/file-manager/server/internal/s3"
 	"github.com/llm-operator/file-manager/server/internal/server"
+	"github.com/llm-operator/file-manager/server/internal/store"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

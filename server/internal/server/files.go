@@ -10,7 +10,7 @@ import (
 
 	"github.com/google/uuid"
 	v1 "github.com/llm-operator/file-manager/api/v1"
-	"github.com/llm-operator/file-manager/common/pkg/store"
+	"github.com/llm-operator/file-manager/server/internal/store"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
