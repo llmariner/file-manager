@@ -1,13 +1,16 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"log"
 	"net"
 
 	v1 "github.com/llm-operator/file-manager/api/v1"
+	"github.com/llm-operator/file-manager/server/internal/config"
 	"github.com/llm-operator/file-manager/server/internal/store"
+	"github.com/llm-operator/rbac-manager/pkg/auth"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -47,10 +50,19 @@ type S struct {
 }
 
 // Run starts the gRPC server.
-func (s *S) Run(port int) error {
+func (s *S) Run(ctx context.Context, port int, authConfig config.AuthConfig) error {
 	log.Printf("Starting server on port %d\n", port)
 
-	grpcServer := grpc.NewServer()
+	var opts []grpc.ServerOption
+	if authConfig.Enable {
+		ai, err := auth.NewInterceptor(ctx, authConfig.RBACInternalServerAddr, "api.files")
+		if err != nil {
+			return err
+		}
+		opts = append(opts, grpc.ChainUnaryInterceptor(ai.Unary()))
+	}
+
+	grpcServer := grpc.NewServer(opts...)
 	v1.RegisterFilesServiceServer(grpcServer, s)
 	reflection.Register(grpcServer)
 

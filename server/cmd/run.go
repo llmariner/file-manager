@@ -103,7 +103,7 @@ func run(ctx context.Context, c *config.Config) error {
 	}()
 
 	go func() {
-		errCh <- s.Run(c.GRPCPort)
+		errCh <- s.Run(ctx, c.GRPCPort, c.AuthConfig)
 	}()
 
 	go func() {
