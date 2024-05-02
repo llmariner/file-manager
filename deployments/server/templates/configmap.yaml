@@ -22,7 +22,5 @@ data:
       username: {{ .Values.global.database.username }}
       passwordEnvName: DB_PASSWORD
     auth:
-      # TODO(aya): inference-engine calls this non-internal file-manager server without a token.
-      # enable: {{ .Values.global.auth.enable }}
-      enable: false
+      enable: {{ .Values.global.auth.enable }}
       rbacServerAddr: {{ .Values.global.auth.rbacInternalServerAddr }}
