@@ -34,6 +34,11 @@ func (s *S) CreateFile(
 		return
 	}
 
+	if status, err := s.reqIntercepter.InterceptHTTPRequest(req); err != nil {
+		http.Error(w, err.Error(), status)
+		return
+	}
+
 	purpose := req.FormValue("purpose")
 	if purpose == "" {
 		http.Error(w, "purpose is required", http.StatusBadRequest)

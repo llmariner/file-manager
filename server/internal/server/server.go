@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net"
+	"net/http"
 
 	v1 "github.com/llm-operator/file-manager/api/v1"
 	"github.com/llm-operator/file-manager/server/internal/config"
@@ -28,12 +29,24 @@ func (n *NoopS3Client) Upload(r io.Reader, key string) error {
 	return nil
 }
 
+type reqIntercepter interface {
+	InterceptHTTPRequest(req *http.Request) (int, error)
+}
+
+type noopReqIntercepter struct {
+}
+
+func (n noopReqIntercepter) InterceptHTTPRequest(req *http.Request) (int, error) {
+	return http.StatusOK, nil
+}
+
 // New creates a server.
 func New(store *store.S, s3Client S3Client, pathPrefix string) *S {
 	return &S{
-		store:      store,
-		s3Client:   s3Client,
-		pathPrefix: pathPrefix,
+		store:          store,
+		s3Client:       s3Client,
+		pathPrefix:     pathPrefix,
+		reqIntercepter: noopReqIntercepter{},
 	}
 }
 
@@ -47,6 +60,8 @@ type S struct {
 	s3Client S3Client
 
 	pathPrefix string
+
+	reqIntercepter reqIntercepter
 }
 
 // Run starts the gRPC server.
@@ -60,6 +75,8 @@ func (s *S) Run(ctx context.Context, port int, authConfig config.AuthConfig) err
 			return err
 		}
 		opts = append(opts, grpc.ChainUnaryInterceptor(ai.Unary()))
+
+		s.reqIntercepter = ai
 	}
 
 	grpcServer := grpc.NewServer(opts...)
