@@ -13,55 +13,57 @@ func TestFile(t *testing.T) {
 	defer tearDown()
 
 	const (
-		fileID   = "m0"
-		tenantID = "tid0"
+		fileID         = "f0"
+		tenantID       = "tid0"
+		organizationID = "oid0"
+		projectID      = "pid0"
 	)
 
-	k := FileKey{
-		FileID:   fileID,
-		TenantID: tenantID,
-	}
-	_, err := st.GetFile(k)
+	_, err := st.GetFile(fileID, projectID)
 	assert.True(t, errors.Is(err, gorm.ErrRecordNotFound))
 
 	_, err = st.CreateFile(FileSpec{
-		Key:      k,
+		FileID:         fileID,
+		TenantID:       tenantID,
+		OrganizationID: organizationID,
+		ProjectID:      projectID,
+
 		Filename: "filename0",
 		Purpose:  "purpose0",
 	})
 	assert.NoError(t, err)
 
-	gotM, err := st.GetFile(k)
+	gotM, err := st.GetFile(fileID, projectID)
 	assert.NoError(t, err)
 	assert.Equal(t, fileID, gotM.FileID)
 	assert.Equal(t, tenantID, gotM.TenantID)
 
-	gotMs, err := st.ListFilesByTenantID(tenantID)
+	gotMs, err := st.ListFilesByProjectID(projectID)
 	assert.NoError(t, err)
 	assert.Len(t, gotMs, 1)
 
-	k1 := FileKey{
-		FileID:   "m1",
-		TenantID: "tid1",
-	}
 	_, err = st.CreateFile(FileSpec{
-		Key:      k1,
+		FileID:         "f1",
+		TenantID:       "tid1",
+		OrganizationID: "oid1",
+		ProjectID:      "pid1",
+
 		Filename: "filename1",
 		Purpose:  "purpose1",
 	})
 	assert.NoError(t, err)
 
-	gotMs, err = st.ListFilesByTenantID(tenantID)
+	gotMs, err = st.ListFilesByProjectID(projectID)
 	assert.NoError(t, err)
 	assert.Len(t, gotMs, 1)
 
-	err = st.DeleteFile(k)
+	err = st.DeleteFile(fileID, projectID)
 	assert.NoError(t, err)
 
-	gotMs, err = st.ListFilesByTenantID(tenantID)
+	gotMs, err = st.ListFilesByProjectID(projectID)
 	assert.NoError(t, err)
 	assert.Len(t, gotMs, 0)
 
-	err = st.DeleteFile(k)
+	err = st.DeleteFile(fileID, projectID)
 	assert.True(t, errors.Is(err, gorm.ErrRecordNotFound))
 }

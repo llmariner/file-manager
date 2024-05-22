@@ -29,13 +29,14 @@ func (s *S) CreateFile(
 	req *http.Request,
 	pathParams map[string]string,
 ) {
-	if err := req.ParseMultipartForm(10 << 20); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	status, userInfo, err := s.reqIntercepter.InterceptHTTPRequest(req)
+	if err != nil {
+		http.Error(w, err.Error(), status)
 		return
 	}
 
-	if status, _, err := s.reqIntercepter.InterceptHTTPRequest(req); err != nil {
-		http.Error(w, err.Error(), status)
+	if err := req.ParseMultipartForm(10 << 20); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -73,10 +74,11 @@ func (s *S) CreateFile(
 	log.Printf("Uploaded the file (%d bytes)\n", header.Size)
 
 	f, err := s.store.CreateFile(store.FileSpec{
-		Key: store.FileKey{
-			FileID:   fileID,
-			TenantID: fakeTenantID,
-		},
+		FileID:         fileID,
+		TenantID:       fakeTenantID,
+		OrganizationID: userInfo.OrganizationID,
+		ProjectID:      userInfo.ProjectID,
+
 		Purpose:  purpose,
 		Filename: header.Filename,
 		Bytes:    header.Size,
@@ -115,15 +117,19 @@ func (s *S) ListFiles(
 	ctx context.Context,
 	req *v1.ListFilesRequest,
 ) (*v1.ListFilesResponse, error) {
+	userInfo, err := s.extractUserInfoFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	var fs []*store.File
-	var err error
 	if p := req.Purpose; p != "" {
 		if err := validatePurpose(p); err != nil {
 			return nil, err
 		}
-		fs, err = s.store.ListFilesByTenantIDAndPurpose(fakeTenantID, p)
+		fs, err = s.store.ListFilesByProjectIDAndPurpose(userInfo.ProjectID, p)
 	} else {
-		fs, err = s.store.ListFilesByTenantID(fakeTenantID)
+		fs, err = s.store.ListFilesByProjectID(userInfo.ProjectID)
 	}
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "list files: %s", err)
@@ -144,14 +150,16 @@ func (s *S) GetFile(
 	ctx context.Context,
 	req *v1.GetFileRequest,
 ) (*v1.File, error) {
+	userInfo, err := s.extractUserInfoFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	if req.Id == "" {
 		return nil, status.Error(codes.InvalidArgument, "id is required")
 	}
 
-	f, err := s.store.GetFile(store.FileKey{
-		FileID:   req.Id,
-		TenantID: fakeTenantID,
-	})
+	f, err := s.store.GetFile(req.Id, userInfo.ProjectID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, status.Errorf(codes.NotFound, "file %q not found", req.Id)
@@ -166,14 +174,16 @@ func (s *S) DeleteFile(
 	ctx context.Context,
 	req *v1.DeleteFileRequest,
 ) (*v1.DeleteFileResponse, error) {
+	userInfo, err := s.extractUserInfoFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	if req.Id == "" {
 		return nil, status.Error(codes.InvalidArgument, "id is required")
 	}
 
-	if err := s.store.DeleteFile(store.FileKey{
-		FileID:   req.Id,
-		TenantID: fakeTenantID,
-	}); err != nil {
+	if err := s.store.DeleteFile(req.Id, userInfo.ProjectID); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, status.Errorf(codes.NotFound, "file %q not found", req.Id)
 		}
@@ -195,10 +205,7 @@ func (s *IS) GetFilePath(
 		return nil, status.Error(codes.InvalidArgument, "id is required")
 	}
 
-	f, err := s.store.GetFile(store.FileKey{
-		FileID:   req.Id,
-		TenantID: fakeTenantID,
-	})
+	f, err := s.store.GetFileByFileID(req.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, status.Errorf(codes.NotFound, "file %q not found", req.Id)
