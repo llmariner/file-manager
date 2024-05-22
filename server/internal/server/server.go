@@ -13,7 +13,13 @@ import (
 	"github.com/llm-operator/file-manager/server/internal/store"
 	"github.com/llm-operator/rbac-manager/pkg/auth"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/status"
+)
+
+const (
+	defaultProjectID = "default"
 )
 
 // S3Client is an interface for an S3 client.
@@ -37,7 +43,12 @@ type noopReqIntercepter struct {
 }
 
 func (n noopReqIntercepter) InterceptHTTPRequest(req *http.Request) (int, auth.UserInfo, error) {
-	return http.StatusOK, auth.UserInfo{}, nil
+	ui := auth.UserInfo{
+		OrganizationID:      "default",
+		ProjectID:           defaultProjectID,
+		KubernetesNamespace: "default",
+	}
+	return http.StatusOK, ui, nil
 }
 
 // New creates a server.
@@ -62,6 +73,7 @@ type S struct {
 	pathPrefix string
 
 	reqIntercepter reqIntercepter
+	enableAuth     bool
 }
 
 // Run starts the gRPC server.
@@ -80,6 +92,7 @@ func (s *S) Run(ctx context.Context, port int, authConfig config.AuthConfig) err
 		opts = append(opts, grpc.ChainUnaryInterceptor(ai.Unary()))
 
 		s.reqIntercepter = ai
+		s.enableAuth = true
 	}
 
 	grpcServer := grpc.NewServer(opts...)
@@ -101,4 +114,20 @@ func (s *S) Run(ctx context.Context, port int, authConfig config.AuthConfig) err
 // Stop stops the gRPC server.
 func (s *S) Stop() {
 	s.srv.Stop()
+}
+
+func (s *S) extractUserInfoFromContext(ctx context.Context) (*auth.UserInfo, error) {
+	if !s.enableAuth {
+		return &auth.UserInfo{
+			OrganizationID:      "default",
+			ProjectID:           defaultProjectID,
+			KubernetesNamespace: "default",
+		}, nil
+	}
+	var ok bool
+	userInfo, ok := auth.ExtractUserInfoFromContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "user info not found")
+	}
+	return userInfo, nil
 }

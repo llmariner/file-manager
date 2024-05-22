@@ -23,13 +23,17 @@ func TestFiles(t *testing.T) {
 	srv := New(st, &NoopS3Client{}, "pathPrefix")
 	ctx := context.Background()
 
-	const fileID = "f0"
+	const (
+		fileID = "f0"
+		orgID  = "o0"
+	)
 
 	_, err := st.CreateFile(store.FileSpec{
-		Key: store.FileKey{
-			FileID:   fileID,
-			TenantID: fakeTenantID,
-		},
+		FileID:         fileID,
+		TenantID:       fakeTenantID,
+		OrganizationID: orgID,
+		ProjectID:      defaultProjectID,
+
 		Filename: "filename0",
 		Purpose:  "purpose0",
 	})
@@ -114,13 +118,17 @@ func TestGetFilePath(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	const fileID = "f0"
+	const (
+		fileID = "f0"
+		orgID  = "o0"
+	)
 
 	_, err := st.CreateFile(store.FileSpec{
-		Key: store.FileKey{
-			FileID:   fileID,
-			TenantID: fakeTenantID,
-		},
+		FileID:         fileID,
+		TenantID:       fakeTenantID,
+		OrganizationID: orgID,
+		ProjectID:      defaultProjectID,
+
 		Filename:        "filename0",
 		Purpose:         "purpose0",
 		ObjectStorePath: "path0",

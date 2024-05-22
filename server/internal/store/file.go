@@ -8,26 +8,26 @@ import (
 type File struct {
 	gorm.Model
 
-	FileID   string `gorm:"uniqueIndex:idx_file_file_id_tenant_id"`
-	TenantID string `gorm:"uniqueIndex:idx_file_file_id_tenant_id"`
+	FileID string `gorm:"uniqueIndex"`
+
+	TenantID       string `gorm:"uniqueIndex"`
+	OrganizationID string
+	ProjectID      string `gorm:"index"`
 
 	Filename string
-	Purpose  string `gorm:"index:idx_file_tenant_id_purpose"`
+	Purpose  string
 
 	Bytes int64
 
 	ObjectStorePath string
 }
 
-// FileKey represents a file key.
-type FileKey struct {
-	FileID   string
-	TenantID string
-}
-
 // FileSpec is a spec of the file
 type FileSpec struct {
-	Key FileKey
+	FileID         string
+	TenantID       string
+	OrganizationID string
+	ProjectID      string
 
 	Filename string
 	Purpose  string
@@ -39,8 +39,10 @@ type FileSpec struct {
 // CreateFile creates a file.
 func (s *S) CreateFile(spec FileSpec) (*File, error) {
 	f := &File{
-		FileID:   spec.Key.FileID,
-		TenantID: spec.Key.TenantID,
+		FileID:         spec.FileID,
+		TenantID:       spec.TenantID,
+		OrganizationID: spec.OrganizationID,
+		ProjectID:      spec.ProjectID,
 
 		Filename: spec.Filename,
 		Purpose:  spec.Purpose,
@@ -54,36 +56,45 @@ func (s *S) CreateFile(spec FileSpec) (*File, error) {
 	return f, nil
 }
 
-// GetFile returns a file by file ID and tenant ID.
-func (s *S) GetFile(k FileKey) (*File, error) {
+// GetFile returns a file by file ID and projectID
+func (s *S) GetFile(fileID, projectID string) (*File, error) {
 	var f File
-	if err := s.db.Where("file_id = ? AND tenant_id = ?", k.FileID, k.TenantID).Take(&f).Error; err != nil {
+	if err := s.db.Where("file_id = ? AND project_id = ?", fileID, projectID).Take(&f).Error; err != nil {
 		return nil, err
 	}
 	return &f, nil
 }
 
-// ListFilesByTenantID list files.
-func (s *S) ListFilesByTenantID(tenantID string) ([]*File, error) {
+// GetFileByFileID returns a file by file ID.
+func (s *S) GetFileByFileID(fileID string) (*File, error) {
+	var f File
+	if err := s.db.Where("file_id = ?", fileID).Take(&f).Error; err != nil {
+		return nil, err
+	}
+	return &f, nil
+}
+
+// ListFilesByProjectID lists files.
+func (s *S) ListFilesByProjectID(projectID string) ([]*File, error) {
 	var fs []*File
-	if err := s.db.Where("tenant_id = ?", tenantID).Find(&fs).Error; err != nil {
+	if err := s.db.Where("project_id = ?", projectID).Find(&fs).Error; err != nil {
 		return nil, err
 	}
 	return fs, nil
 }
 
-// ListFilesByTenantIDAndPurpose list files.
-func (s *S) ListFilesByTenantIDAndPurpose(tenantID, purpose string) ([]*File, error) {
+// ListFilesByProjectIDAndPurpose list files.
+func (s *S) ListFilesByProjectIDAndPurpose(projectID, purpose string) ([]*File, error) {
 	var fs []*File
-	if err := s.db.Where("tenant_id = ? AND purpose = ?", tenantID).Find(&fs).Error; err != nil {
+	if err := s.db.Where("project_id = ? AND purpose = ?", projectID).Find(&fs).Error; err != nil {
 		return nil, err
 	}
 	return fs, nil
 }
 
-// DeleteFile deletes a file by file ID and tenant ID.
-func (s *S) DeleteFile(k FileKey) error {
-	res := s.db.Unscoped().Where("file_id = ? AND tenant_id = ?", k.FileID, k.TenantID).Delete(&File{})
+// DeleteFile deletes a file by file ID and project ID.
+func (s *S) DeleteFile(fileID, projectID string) error {
+	res := s.db.Unscoped().Where("file_id = ? AND project_id = ?", fileID, projectID).Delete(&File{})
 	if err := res.Error; err != nil {
 		return err
 	}
