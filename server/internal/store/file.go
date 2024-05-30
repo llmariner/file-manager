@@ -10,7 +10,7 @@ type File struct {
 
 	FileID string `gorm:"uniqueIndex"`
 
-	TenantID       string `gorm:"uniqueIndex"`
+	TenantID       string `gorm:"index"`
 	OrganizationID string
 	ProjectID      string `gorm:"index"`
 
