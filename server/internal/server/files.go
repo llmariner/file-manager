@@ -65,7 +65,7 @@ func (s *S) CreateFile(
 	}()
 
 	log.Printf("Uploading the file to S3\n")
-	fileID, err := id.GenerateID("file-", 20)
+	fileID, err := id.GenerateID("file-", 24)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("generate file id: %s", err.Error()), http.StatusInternalServerError)
 		return
