@@ -8,7 +8,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/google/uuid"
+	"github.com/llm-operator/common/pkg/id"
 	v1 "github.com/llm-operator/file-manager/api/v1"
 	"github.com/llm-operator/file-manager/server/internal/store"
 	"google.golang.org/grpc/codes"
@@ -65,7 +65,12 @@ func (s *S) CreateFile(
 	}()
 
 	log.Printf("Uploading the file to S3\n")
-	fileID := newFileID()
+	fileID, err := id.GenerateID("file-", 24)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("generate file id: %s", err.Error()), http.StatusInternalServerError)
+		return
+	}
+
 	path := s.filePath(fileID)
 	if err := s.s3Client.Upload(file, path); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -259,8 +264,4 @@ func toFileJSON(f *store.File) *fileJSON {
 		Object:    "file",
 		Purpose:   f.Purpose,
 	}
-}
-
-func newFileID() string {
-	return uuid.New().String()
 }
