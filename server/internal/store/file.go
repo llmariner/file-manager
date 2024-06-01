@@ -77,7 +77,7 @@ func (s *S) GetFileByFileID(fileID string) (*File, error) {
 // ListFilesByProjectID lists files.
 func (s *S) ListFilesByProjectID(projectID string) ([]*File, error) {
 	var fs []*File
-	if err := s.db.Where("project_id = ?", projectID).Find(&fs).Error; err != nil {
+	if err := s.db.Where("project_id = ?", projectID).Order("id DESC").Find(&fs).Error; err != nil {
 		return nil, err
 	}
 	return fs, nil
@@ -86,7 +86,7 @@ func (s *S) ListFilesByProjectID(projectID string) ([]*File, error) {
 // ListFilesByProjectIDAndPurpose list files.
 func (s *S) ListFilesByProjectIDAndPurpose(projectID, purpose string) ([]*File, error) {
 	var fs []*File
-	if err := s.db.Where("project_id = ? AND purpose = ?", projectID).Find(&fs).Error; err != nil {
+	if err := s.db.Where("project_id = ? AND purpose = ?", projectID).Order("id DESC").Find(&fs).Error; err != nil {
 		return nil, err
 	}
 	return fs, nil
