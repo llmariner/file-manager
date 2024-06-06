@@ -17,8 +17,6 @@ import (
 )
 
 const (
-	fakeTenantID = "fake-tenant-id"
-
 	purposeFineTune   = "fine-tune"
 	purposeAssistants = "assistants"
 )
@@ -80,7 +78,7 @@ func (s *S) CreateFile(
 
 	f, err := s.store.CreateFile(store.FileSpec{
 		FileID:         fileID,
-		TenantID:       fakeTenantID,
+		TenantID:       userInfo.TenantID,
 		OrganizationID: userInfo.OrganizationID,
 		ProjectID:      userInfo.ProjectID,
 

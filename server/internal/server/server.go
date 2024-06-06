@@ -20,6 +20,7 @@ import (
 
 const (
 	defaultProjectID = "default"
+	defaultTenantID  = "default-tenant-id"
 )
 
 // S3Client is an interface for an S3 client.
@@ -47,6 +48,7 @@ func (n noopReqIntercepter) InterceptHTTPRequest(req *http.Request) (int, auth.U
 		OrganizationID:      "default",
 		ProjectID:           defaultProjectID,
 		KubernetesNamespace: "default",
+		TenantID:            defaultTenantID,
 	}
 	return http.StatusOK, ui, nil
 }
@@ -122,6 +124,7 @@ func (s *S) extractUserInfoFromContext(ctx context.Context) (*auth.UserInfo, err
 			OrganizationID:      "default",
 			ProjectID:           defaultProjectID,
 			KubernetesNamespace: "default",
+			TenantID:            defaultTenantID,
 		}, nil
 	}
 	var ok bool

@@ -30,7 +30,7 @@ func TestFiles(t *testing.T) {
 
 	_, err := st.CreateFile(store.FileSpec{
 		FileID:         fileID,
-		TenantID:       fakeTenantID,
+		TenantID:       defaultTenantID,
 		OrganizationID: orgID,
 		ProjectID:      defaultProjectID,
 
@@ -125,7 +125,7 @@ func TestGetFilePath(t *testing.T) {
 
 	_, err := st.CreateFile(store.FileSpec{
 		FileID:         fileID,
-		TenantID:       fakeTenantID,
+		TenantID:       defaultTenantID,
 		OrganizationID: orgID,
 		ProjectID:      defaultProjectID,
 
