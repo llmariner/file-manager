@@ -1,0 +1,17 @@
+httpPort: 8080
+grpcPort: 8081
+internalGrpcPort: 8082
+
+objectStore:
+  s3:
+    endpointUrl: http://minio:9000
+    region: dummy
+    bucket: llm-operator
+    pathPrefix: files
+
+database:
+  host: postgres
+  port: 5432
+  database: file_manager
+  username: user
+  passwordEnvName: DB_PASSWORD
