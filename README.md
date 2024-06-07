@@ -1,5 +1,14 @@
 # file-manager
 
+## Running with Docker Compose
+
+Run the following command:
+
+```bash
+docker-compose build
+docker-compose up
+```
+
 ## Running Locally
 
 ```bash
