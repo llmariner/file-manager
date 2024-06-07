@@ -204,11 +204,16 @@ func (s *WS) GetFilePath(
 	ctx context.Context,
 	req *v1.GetFilePathRequest,
 ) (*v1.GetFilePathResponse, error) {
+	clusterInfo, err := s.extractClusterInfoFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	if req.Id == "" {
 		return nil, status.Error(codes.InvalidArgument, "id is required")
 	}
 
-	f, err := s.store.GetFileByFileID(req.Id)
+	f, err := s.store.GetFileByFileIDAndTenantID(req.Id, clusterInfo.TenantID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, status.Errorf(codes.NotFound, "file %q not found", req.Id)

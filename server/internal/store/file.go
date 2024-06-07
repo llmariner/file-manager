@@ -65,10 +65,10 @@ func (s *S) GetFile(fileID, projectID string) (*File, error) {
 	return &f, nil
 }
 
-// GetFileByFileID returns a file by file ID.
-func (s *S) GetFileByFileID(fileID string) (*File, error) {
+// GetFileByFileIDAndTenantID returns a file by file ID and a tenant ID.
+func (s *S) GetFileByFileIDAndTenantID(fileID, tenantID string) (*File, error) {
 	var f File
-	if err := s.db.Where("file_id = ?", fileID).Take(&f).Error; err != nil {
+	if err := s.db.Where("file_id = ? AND tenant_id = ?", fileID, tenantID).Take(&f).Error; err != nil {
 		return nil, err
 	}
 	return &f, nil

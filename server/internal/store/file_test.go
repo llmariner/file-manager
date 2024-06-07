@@ -38,6 +38,11 @@ func TestFile(t *testing.T) {
 	assert.Equal(t, fileID, gotM.FileID)
 	assert.Equal(t, tenantID, gotM.TenantID)
 
+	gotM, err = st.GetFileByFileIDAndTenantID(fileID, tenantID)
+	assert.NoError(t, err)
+	assert.Equal(t, fileID, gotM.FileID)
+	assert.Equal(t, tenantID, gotM.TenantID)
+
 	gotMs, err := st.ListFilesByProjectID(projectID)
 	assert.NoError(t, err)
 	assert.Len(t, gotMs, 1)
