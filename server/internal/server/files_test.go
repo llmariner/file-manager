@@ -105,7 +105,7 @@ func TestCreateFile(t *testing.T) {
 	assert.True(t, fj.ID != "")
 	assert.Equal(t, purposeFineTune, fj.Purpose)
 	assert.Equal(t, "test-file.jsonl", fj.Filename)
-	//assert.Equal(t, int64(5), fj.Bytes)
+	assert.Equal(t, int64(5), fj.Bytes)
 
 	resp, err := srv.GetFile(context.Background(), &v1.GetFileRequest{
 		Id: fj.ID,
