@@ -135,8 +135,8 @@ func TestGetFilePath(t *testing.T) {
 	})
 	assert.NoError(t, err)
 
-	isrv := NewInternal(st)
-	got, err := isrv.GetFilePath(context.Background(), &v1.GetFilePathRequest{
+	wsrv := NewWorkerServiceServer(st)
+	got, err := wsrv.GetFilePath(context.Background(), &v1.GetFilePathRequest{
 		Id: fileID,
 	})
 	assert.NoError(t, err)

@@ -172,86 +172,86 @@ var FilesService_ServiceDesc = grpc.ServiceDesc{
 	Metadata: "api/v1/file_manager_service.proto",
 }
 
-// FilesInternalServiceClient is the client API for FilesInternalService service.
+// FilesWorkerServiceClient is the client API for FilesWorkerService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type FilesInternalServiceClient interface {
+type FilesWorkerServiceClient interface {
 	GetFilePath(ctx context.Context, in *GetFilePathRequest, opts ...grpc.CallOption) (*GetFilePathResponse, error)
 }
 
-type filesInternalServiceClient struct {
+type filesWorkerServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewFilesInternalServiceClient(cc grpc.ClientConnInterface) FilesInternalServiceClient {
-	return &filesInternalServiceClient{cc}
+func NewFilesWorkerServiceClient(cc grpc.ClientConnInterface) FilesWorkerServiceClient {
+	return &filesWorkerServiceClient{cc}
 }
 
-func (c *filesInternalServiceClient) GetFilePath(ctx context.Context, in *GetFilePathRequest, opts ...grpc.CallOption) (*GetFilePathResponse, error) {
+func (c *filesWorkerServiceClient) GetFilePath(ctx context.Context, in *GetFilePathRequest, opts ...grpc.CallOption) (*GetFilePathResponse, error) {
 	out := new(GetFilePathResponse)
-	err := c.cc.Invoke(ctx, "/llmoperator.files.server.v1.FilesInternalService/GetFilePath", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/llmoperator.files.server.v1.FilesWorkerService/GetFilePath", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// FilesInternalServiceServer is the server API for FilesInternalService service.
-// All implementations must embed UnimplementedFilesInternalServiceServer
+// FilesWorkerServiceServer is the server API for FilesWorkerService service.
+// All implementations must embed UnimplementedFilesWorkerServiceServer
 // for forward compatibility
-type FilesInternalServiceServer interface {
+type FilesWorkerServiceServer interface {
 	GetFilePath(context.Context, *GetFilePathRequest) (*GetFilePathResponse, error)
-	mustEmbedUnimplementedFilesInternalServiceServer()
+	mustEmbedUnimplementedFilesWorkerServiceServer()
 }
 
-// UnimplementedFilesInternalServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedFilesInternalServiceServer struct {
+// UnimplementedFilesWorkerServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedFilesWorkerServiceServer struct {
 }
 
-func (UnimplementedFilesInternalServiceServer) GetFilePath(context.Context, *GetFilePathRequest) (*GetFilePathResponse, error) {
+func (UnimplementedFilesWorkerServiceServer) GetFilePath(context.Context, *GetFilePathRequest) (*GetFilePathResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFilePath not implemented")
 }
-func (UnimplementedFilesInternalServiceServer) mustEmbedUnimplementedFilesInternalServiceServer() {}
+func (UnimplementedFilesWorkerServiceServer) mustEmbedUnimplementedFilesWorkerServiceServer() {}
 
-// UnsafeFilesInternalServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to FilesInternalServiceServer will
+// UnsafeFilesWorkerServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to FilesWorkerServiceServer will
 // result in compilation errors.
-type UnsafeFilesInternalServiceServer interface {
-	mustEmbedUnimplementedFilesInternalServiceServer()
+type UnsafeFilesWorkerServiceServer interface {
+	mustEmbedUnimplementedFilesWorkerServiceServer()
 }
 
-func RegisterFilesInternalServiceServer(s grpc.ServiceRegistrar, srv FilesInternalServiceServer) {
-	s.RegisterService(&FilesInternalService_ServiceDesc, srv)
+func RegisterFilesWorkerServiceServer(s grpc.ServiceRegistrar, srv FilesWorkerServiceServer) {
+	s.RegisterService(&FilesWorkerService_ServiceDesc, srv)
 }
 
-func _FilesInternalService_GetFilePath_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _FilesWorkerService_GetFilePath_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetFilePathRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FilesInternalServiceServer).GetFilePath(ctx, in)
+		return srv.(FilesWorkerServiceServer).GetFilePath(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/llmoperator.files.server.v1.FilesInternalService/GetFilePath",
+		FullMethod: "/llmoperator.files.server.v1.FilesWorkerService/GetFilePath",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FilesInternalServiceServer).GetFilePath(ctx, req.(*GetFilePathRequest))
+		return srv.(FilesWorkerServiceServer).GetFilePath(ctx, req.(*GetFilePathRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// FilesInternalService_ServiceDesc is the grpc.ServiceDesc for FilesInternalService service.
+// FilesWorkerService_ServiceDesc is the grpc.ServiceDesc for FilesWorkerService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var FilesInternalService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "llmoperator.files.server.v1.FilesInternalService",
-	HandlerType: (*FilesInternalServiceServer)(nil),
+var FilesWorkerService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "llmoperator.files.server.v1.FilesWorkerService",
+	HandlerType: (*FilesWorkerServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetFilePath",
-			Handler:    _FilesInternalService_GetFilePath_Handler,
+			Handler:    _FilesWorkerService_GetFilePath_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

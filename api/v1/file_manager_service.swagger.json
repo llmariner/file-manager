@@ -9,7 +9,7 @@
       "name": "FilesService"
     },
     {
-      "name": "FilesInternalService"
+      "name": "FilesWorkerService"
     }
   ],
   "consumes": [

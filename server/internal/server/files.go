@@ -200,7 +200,7 @@ func (s *S) DeleteFile(
 }
 
 // GetFilePath gets a file path.
-func (s *IS) GetFilePath(
+func (s *WS) GetFilePath(
 	ctx context.Context,
 	req *v1.GetFilePathRequest,
 ) (*v1.GetFilePathResponse, error) {
