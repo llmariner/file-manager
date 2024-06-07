@@ -38,15 +38,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "file-manager-server.fullname" . }}-internal-grpc
+  name: {{ include "file-manager-server.fullname" . }}-worker-service-grpc
   labels:
     {{- include "file-manager-server.labels" . | nindent 4 }}
 spec:
   type: ClusterIP
   ports:
   - name: grpc
-    port: {{ .Values.internalGrpcPort }}
+    port: {{ .Values.workerServiceGrpcPort }}
     protocol: TCP
-    targetPort: internal-grpc
+    targetPort: worker-service-grpc
   selector:
     {{- include "file-manager-server.selectorLabels" . | nindent 4 }}
