@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/vectore_stores": {
+    "/v1/vector_stores": {
       "get": {
         "operationId": "VectorStoreService_ListVectorStores",
         "responses": {
@@ -95,7 +95,7 @@
         ]
       }
     },
-    "/v1/vectore_stores/{vectoreStoreId}": {
+    "/v1/vector_stores/{vectorStoreId}": {
       "get": {
         "operationId": "VectorStoreService_GetVectorStore",
         "responses": {
@@ -114,7 +114,7 @@
         },
         "parameters": [
           {
-            "name": "vectoreStoreId",
+            "name": "vectorStoreId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -142,7 +142,7 @@
         },
         "parameters": [
           {
-            "name": "vectoreStoreId",
+            "name": "vectorStoreId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -170,7 +170,7 @@
         },
         "parameters": [
           {
-            "name": "vectoreStoreId",
+            "name": "vectorStoreId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -204,7 +204,7 @@
         ]
       }
     },
-    "/v1/vectore_stores/{vectoreStoreId}/files": {
+    "/v1/vector_stores/{vectorStoreId}/files": {
       "get": {
         "operationId": "VectorStoreService_ListVectorStoreFiles",
         "responses": {
@@ -223,7 +223,7 @@
         },
         "parameters": [
           {
-            "name": "vectoreStoreId",
+            "name": "vectorStoreId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -283,7 +283,7 @@
         },
         "parameters": [
           {
-            "name": "vectoreStoreId",
+            "name": "vectorStoreId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -310,7 +310,7 @@
         ]
       }
     },
-    "/v1/vectore_stores/{vectoreStoreId}/files/{fileId}": {
+    "/v1/vector_stores/{vectorStoreId}/files/{fileId}": {
       "get": {
         "operationId": "VectorStoreService_GetVectorStoreFile",
         "responses": {
@@ -329,7 +329,7 @@
         },
         "parameters": [
           {
-            "name": "vectoreStoreId",
+            "name": "vectorStoreId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -363,7 +363,7 @@
         },
         "parameters": [
           {
-            "name": "vectoreStoreId",
+            "name": "vectorStoreId",
             "in": "path",
             "required": true,
             "type": "string"

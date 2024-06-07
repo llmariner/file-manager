@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package llmoperator.vectore_store.v1;
+package llmoperator.vector_store.v1;
 
 import "google/api/annotations.proto";
 
@@ -75,11 +75,11 @@ message ListVectorStoresResponse {
 }
 
 message GetVectorStoreRequest {
-    string vectore_store_id = 1;
+    string vector_store_id = 1;
 }
 
 message UpdateVectorStoreRequest {
-    string vectore_store_id = 1;
+    string vector_store_id = 1;
     // string or null.
     string name = 2;
     ExpiresAfter expires_after = 3;
@@ -87,7 +87,7 @@ message UpdateVectorStoreRequest {
 }
 
 message DeleteVectorStoreRequest {
-    string vectore_store_id = 1;
+    string vector_store_id = 1;
 }
 
 message DeleteVectorStoreResponse {
@@ -118,13 +118,13 @@ message VectorStoreFile {
 }
 
 message CreateVectorStoreFileRequest {
-    string vectore_store_id = 1;
+    string vector_store_id = 1;
     string file_id = 2;
     ChunkingStrategy chunking_strategy = 3;
 }
 
 message ListVectorStoreFilesRequest {
-    string vectore_store_id = 1;
+    string vector_store_id = 1;
     int32 limit = 2;
     string order = 3;
     string after = 4;
@@ -142,12 +142,12 @@ message ListVectorStoreFilesResponse {
 }
 
 message GetVectorStoreFileRequest {
-    string vectore_store_id = 1;
+    string vector_store_id = 1;
     string file_id = 2;
 }
 
 message DeleteVectorStoreFileRequest {
-    string vectore_store_id = 1;
+    string vector_store_id = 1;
     string file_id = 2;
 }
 
@@ -160,58 +160,58 @@ message DeleteVectorStoreFileResponse {
 service VectorStoreService {
   rpc CreateVectorStore(CreateVectorStoreRequest) returns (VectorStore) {
     option (google.api.http) = {
-      post: "/v1/vectore_stores"
+      post: "/v1/vector_stores"
       body: "*"
     };
   }
 
   rpc ListVectorStores(ListVectorStoresRequest) returns (ListVectorStoresResponse) {
     option (google.api.http) = {
-      get: "/v1/vectore_stores"
+      get: "/v1/vector_stores"
     };
   }
 
   rpc GetVectorStore(GetVectorStoreRequest) returns (VectorStore) {
     option (google.api.http) = {
-      get: "/v1/vectore_stores/{vectore_store_id}"
+      get: "/v1/vector_stores/{vector_store_id}"
     };
   }
 
   rpc UpdateVectorStore(UpdateVectorStoreRequest) returns (VectorStore) {
     option (google.api.http) = {
-      post: "/v1/vectore_stores/{vectore_store_id}"
+      post: "/v1/vector_stores/{vector_store_id}"
       body: "*"
     };
   }
 
   rpc DeleteVectorStore(DeleteVectorStoreRequest) returns (DeleteVectorStoreResponse) {
     option (google.api.http) = {
-      delete: "/v1/vectore_stores/{vectore_store_id}"
+      delete: "/v1/vector_stores/{vector_store_id}"
     };
   }
 
   rpc CreateVectorStoreFile(CreateVectorStoreFileRequest) returns (VectorStoreFile) {
     option (google.api.http) = {
-      post: "/v1/vectore_stores/{vectore_store_id}/files"
+      post: "/v1/vector_stores/{vector_store_id}/files"
       body: "*"
     };
   }
 
   rpc ListVectorStoreFiles(ListVectorStoreFilesRequest) returns (ListVectorStoreFilesResponse) {
     option (google.api.http) = {
-      get: "/v1/vectore_stores/{vectore_store_id}/files"
+      get: "/v1/vector_stores/{vector_store_id}/files"
     };
   }
 
   rpc GetVectorStoreFile(GetVectorStoreFileRequest) returns (VectorStoreFile) {
     option (google.api.http) = {
-      get: "/v1/vectore_stores/{vectore_store_id}/files/{file_id}"
+      get: "/v1/vector_stores/{vector_store_id}/files/{file_id}"
     };
   }
 
   rpc DeleteVectorStoreFile(DeleteVectorStoreFileRequest) returns (DeleteVectorStoreFileResponse) {
     option (google.api.http) = {
-      delete: "/v1/vectore_stores/{vectore_store_id}/files/{file_id}"
+      delete: "/v1/vector_stores/{vector_store_id}/files/{file_id}"
     };
   }
 }

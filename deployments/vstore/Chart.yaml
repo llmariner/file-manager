@@ -1,0 +1,6 @@
+apiVersion: v2
+name: file-manager-vstore
+description: A Helm chart for file-manager-vstore
+type: application
+version: 0.1.0
+appVersion: 0.1.0
