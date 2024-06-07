@@ -1,0 +1,5 @@
+httpPort: 8080
+grpcPort: 8081
+auth:
+  enable: false
+  rbacInternalServerAddr: ""

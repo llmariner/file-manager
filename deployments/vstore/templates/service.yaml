@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "file-manager-vstore.fullname" . }}-http
+  labels:
+    {{- include "file-manager-vstore.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.httpPort }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "file-manager-vstore.selectorLabels" . | nindent 4 }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "file-manager-vstore.fullname" . }}-grpc
+  labels:
+    {{- include "file-manager-vstore.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+  - name: grpc
+    port: {{ .Values.grpcPort }}
+    protocol: TCP
+    targetPort: grpc
+  selector:
+    {{- include "file-manager-vstore.selectorLabels" . | nindent 4 }}

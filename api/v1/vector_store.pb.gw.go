@@ -112,14 +112,14 @@ func request_VectorStoreService_GetVectorStore_0(ctx context.Context, marshaler 
 		_   = err
 	)
 
-	val, ok = pathParams["vectore_store_id"]
+	val, ok = pathParams["vector_store_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vectore_store_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vector_store_id")
 	}
 
-	protoReq.VectoreStoreId, err = runtime.String(val)
+	protoReq.VectorStoreId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vectore_store_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vector_store_id", err)
 	}
 
 	msg, err := client.GetVectorStore(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -138,14 +138,14 @@ func local_request_VectorStoreService_GetVectorStore_0(ctx context.Context, mars
 		_   = err
 	)
 
-	val, ok = pathParams["vectore_store_id"]
+	val, ok = pathParams["vector_store_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vectore_store_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vector_store_id")
 	}
 
-	protoReq.VectoreStoreId, err = runtime.String(val)
+	protoReq.VectorStoreId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vectore_store_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vector_store_id", err)
 	}
 
 	msg, err := server.GetVectorStore(ctx, &protoReq)
@@ -172,14 +172,14 @@ func request_VectorStoreService_UpdateVectorStore_0(ctx context.Context, marshal
 		_   = err
 	)
 
-	val, ok = pathParams["vectore_store_id"]
+	val, ok = pathParams["vector_store_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vectore_store_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vector_store_id")
 	}
 
-	protoReq.VectoreStoreId, err = runtime.String(val)
+	protoReq.VectorStoreId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vectore_store_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vector_store_id", err)
 	}
 
 	msg, err := client.UpdateVectorStore(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -206,14 +206,14 @@ func local_request_VectorStoreService_UpdateVectorStore_0(ctx context.Context, m
 		_   = err
 	)
 
-	val, ok = pathParams["vectore_store_id"]
+	val, ok = pathParams["vector_store_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vectore_store_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vector_store_id")
 	}
 
-	protoReq.VectoreStoreId, err = runtime.String(val)
+	protoReq.VectorStoreId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vectore_store_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vector_store_id", err)
 	}
 
 	msg, err := server.UpdateVectorStore(ctx, &protoReq)
@@ -232,14 +232,14 @@ func request_VectorStoreService_DeleteVectorStore_0(ctx context.Context, marshal
 		_   = err
 	)
 
-	val, ok = pathParams["vectore_store_id"]
+	val, ok = pathParams["vector_store_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vectore_store_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vector_store_id")
 	}
 
-	protoReq.VectoreStoreId, err = runtime.String(val)
+	protoReq.VectorStoreId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vectore_store_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vector_store_id", err)
 	}
 
 	msg, err := client.DeleteVectorStore(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -258,14 +258,14 @@ func local_request_VectorStoreService_DeleteVectorStore_0(ctx context.Context, m
 		_   = err
 	)
 
-	val, ok = pathParams["vectore_store_id"]
+	val, ok = pathParams["vector_store_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vectore_store_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vector_store_id")
 	}
 
-	protoReq.VectoreStoreId, err = runtime.String(val)
+	protoReq.VectorStoreId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vectore_store_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vector_store_id", err)
 	}
 
 	msg, err := server.DeleteVectorStore(ctx, &protoReq)
@@ -292,14 +292,14 @@ func request_VectorStoreService_CreateVectorStoreFile_0(ctx context.Context, mar
 		_   = err
 	)
 
-	val, ok = pathParams["vectore_store_id"]
+	val, ok = pathParams["vector_store_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vectore_store_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vector_store_id")
 	}
 
-	protoReq.VectoreStoreId, err = runtime.String(val)
+	protoReq.VectorStoreId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vectore_store_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vector_store_id", err)
 	}
 
 	msg, err := client.CreateVectorStoreFile(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -326,14 +326,14 @@ func local_request_VectorStoreService_CreateVectorStoreFile_0(ctx context.Contex
 		_   = err
 	)
 
-	val, ok = pathParams["vectore_store_id"]
+	val, ok = pathParams["vector_store_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vectore_store_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vector_store_id")
 	}
 
-	protoReq.VectoreStoreId, err = runtime.String(val)
+	protoReq.VectorStoreId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vectore_store_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vector_store_id", err)
 	}
 
 	msg, err := server.CreateVectorStoreFile(ctx, &protoReq)
@@ -342,7 +342,7 @@ func local_request_VectorStoreService_CreateVectorStoreFile_0(ctx context.Contex
 }
 
 var (
-	filter_VectorStoreService_ListVectorStoreFiles_0 = &utilities.DoubleArray{Encoding: map[string]int{"vectore_store_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_VectorStoreService_ListVectorStoreFiles_0 = &utilities.DoubleArray{Encoding: map[string]int{"vector_store_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
 func request_VectorStoreService_ListVectorStoreFiles_0(ctx context.Context, marshaler runtime.Marshaler, client VectorStoreServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
@@ -356,14 +356,14 @@ func request_VectorStoreService_ListVectorStoreFiles_0(ctx context.Context, mars
 		_   = err
 	)
 
-	val, ok = pathParams["vectore_store_id"]
+	val, ok = pathParams["vector_store_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vectore_store_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vector_store_id")
 	}
 
-	protoReq.VectoreStoreId, err = runtime.String(val)
+	protoReq.VectorStoreId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vectore_store_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vector_store_id", err)
 	}
 
 	if err := req.ParseForm(); err != nil {
@@ -389,14 +389,14 @@ func local_request_VectorStoreService_ListVectorStoreFiles_0(ctx context.Context
 		_   = err
 	)
 
-	val, ok = pathParams["vectore_store_id"]
+	val, ok = pathParams["vector_store_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vectore_store_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vector_store_id")
 	}
 
-	protoReq.VectoreStoreId, err = runtime.String(val)
+	protoReq.VectorStoreId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vectore_store_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vector_store_id", err)
 	}
 
 	if err := req.ParseForm(); err != nil {
@@ -422,14 +422,14 @@ func request_VectorStoreService_GetVectorStoreFile_0(ctx context.Context, marsha
 		_   = err
 	)
 
-	val, ok = pathParams["vectore_store_id"]
+	val, ok = pathParams["vector_store_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vectore_store_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vector_store_id")
 	}
 
-	protoReq.VectoreStoreId, err = runtime.String(val)
+	protoReq.VectorStoreId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vectore_store_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vector_store_id", err)
 	}
 
 	val, ok = pathParams["file_id"]
@@ -458,14 +458,14 @@ func local_request_VectorStoreService_GetVectorStoreFile_0(ctx context.Context, 
 		_   = err
 	)
 
-	val, ok = pathParams["vectore_store_id"]
+	val, ok = pathParams["vector_store_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vectore_store_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vector_store_id")
 	}
 
-	protoReq.VectoreStoreId, err = runtime.String(val)
+	protoReq.VectorStoreId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vectore_store_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vector_store_id", err)
 	}
 
 	val, ok = pathParams["file_id"]
@@ -494,14 +494,14 @@ func request_VectorStoreService_DeleteVectorStoreFile_0(ctx context.Context, mar
 		_   = err
 	)
 
-	val, ok = pathParams["vectore_store_id"]
+	val, ok = pathParams["vector_store_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vectore_store_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vector_store_id")
 	}
 
-	protoReq.VectoreStoreId, err = runtime.String(val)
+	protoReq.VectorStoreId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vectore_store_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vector_store_id", err)
 	}
 
 	val, ok = pathParams["file_id"]
@@ -530,14 +530,14 @@ func local_request_VectorStoreService_DeleteVectorStoreFile_0(ctx context.Contex
 		_   = err
 	)
 
-	val, ok = pathParams["vectore_store_id"]
+	val, ok = pathParams["vector_store_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vectore_store_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "vector_store_id")
 	}
 
-	protoReq.VectoreStoreId, err = runtime.String(val)
+	protoReq.VectorStoreId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vectore_store_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "vector_store_id", err)
 	}
 
 	val, ok = pathParams["file_id"]
@@ -567,7 +567,7 @@ func RegisterVectorStoreServiceHandlerServer(ctx context.Context, mux *runtime.S
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/CreateVectorStore", runtime.WithHTTPPathPattern("/v1/vectore_stores"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/CreateVectorStore", runtime.WithHTTPPathPattern("/v1/vector_stores"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -590,7 +590,7 @@ func RegisterVectorStoreServiceHandlerServer(ctx context.Context, mux *runtime.S
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/ListVectorStores", runtime.WithHTTPPathPattern("/v1/vectore_stores"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/ListVectorStores", runtime.WithHTTPPathPattern("/v1/vector_stores"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -613,7 +613,7 @@ func RegisterVectorStoreServiceHandlerServer(ctx context.Context, mux *runtime.S
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/GetVectorStore", runtime.WithHTTPPathPattern("/v1/vectore_stores/{vectore_store_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/GetVectorStore", runtime.WithHTTPPathPattern("/v1/vector_stores/{vector_store_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -636,7 +636,7 @@ func RegisterVectorStoreServiceHandlerServer(ctx context.Context, mux *runtime.S
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/UpdateVectorStore", runtime.WithHTTPPathPattern("/v1/vectore_stores/{vectore_store_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/UpdateVectorStore", runtime.WithHTTPPathPattern("/v1/vector_stores/{vector_store_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -659,7 +659,7 @@ func RegisterVectorStoreServiceHandlerServer(ctx context.Context, mux *runtime.S
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/DeleteVectorStore", runtime.WithHTTPPathPattern("/v1/vectore_stores/{vectore_store_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/DeleteVectorStore", runtime.WithHTTPPathPattern("/v1/vector_stores/{vector_store_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -682,7 +682,7 @@ func RegisterVectorStoreServiceHandlerServer(ctx context.Context, mux *runtime.S
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/CreateVectorStoreFile", runtime.WithHTTPPathPattern("/v1/vectore_stores/{vectore_store_id}/files"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/CreateVectorStoreFile", runtime.WithHTTPPathPattern("/v1/vector_stores/{vector_store_id}/files"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -705,7 +705,7 @@ func RegisterVectorStoreServiceHandlerServer(ctx context.Context, mux *runtime.S
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/ListVectorStoreFiles", runtime.WithHTTPPathPattern("/v1/vectore_stores/{vectore_store_id}/files"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/ListVectorStoreFiles", runtime.WithHTTPPathPattern("/v1/vector_stores/{vector_store_id}/files"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -728,7 +728,7 @@ func RegisterVectorStoreServiceHandlerServer(ctx context.Context, mux *runtime.S
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/GetVectorStoreFile", runtime.WithHTTPPathPattern("/v1/vectore_stores/{vectore_store_id}/files/{file_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/GetVectorStoreFile", runtime.WithHTTPPathPattern("/v1/vector_stores/{vector_store_id}/files/{file_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -751,7 +751,7 @@ func RegisterVectorStoreServiceHandlerServer(ctx context.Context, mux *runtime.S
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/DeleteVectorStoreFile", runtime.WithHTTPPathPattern("/v1/vectore_stores/{vectore_store_id}/files/{file_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/DeleteVectorStoreFile", runtime.WithHTTPPathPattern("/v1/vector_stores/{vector_store_id}/files/{file_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -813,7 +813,7 @@ func RegisterVectorStoreServiceHandlerClient(ctx context.Context, mux *runtime.S
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/CreateVectorStore", runtime.WithHTTPPathPattern("/v1/vectore_stores"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/CreateVectorStore", runtime.WithHTTPPathPattern("/v1/vector_stores"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -833,7 +833,7 @@ func RegisterVectorStoreServiceHandlerClient(ctx context.Context, mux *runtime.S
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/ListVectorStores", runtime.WithHTTPPathPattern("/v1/vectore_stores"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/ListVectorStores", runtime.WithHTTPPathPattern("/v1/vector_stores"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -853,7 +853,7 @@ func RegisterVectorStoreServiceHandlerClient(ctx context.Context, mux *runtime.S
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/GetVectorStore", runtime.WithHTTPPathPattern("/v1/vectore_stores/{vectore_store_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/GetVectorStore", runtime.WithHTTPPathPattern("/v1/vector_stores/{vector_store_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -873,7 +873,7 @@ func RegisterVectorStoreServiceHandlerClient(ctx context.Context, mux *runtime.S
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/UpdateVectorStore", runtime.WithHTTPPathPattern("/v1/vectore_stores/{vectore_store_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/UpdateVectorStore", runtime.WithHTTPPathPattern("/v1/vector_stores/{vector_store_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -893,7 +893,7 @@ func RegisterVectorStoreServiceHandlerClient(ctx context.Context, mux *runtime.S
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/DeleteVectorStore", runtime.WithHTTPPathPattern("/v1/vectore_stores/{vectore_store_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/DeleteVectorStore", runtime.WithHTTPPathPattern("/v1/vector_stores/{vector_store_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -913,7 +913,7 @@ func RegisterVectorStoreServiceHandlerClient(ctx context.Context, mux *runtime.S
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/CreateVectorStoreFile", runtime.WithHTTPPathPattern("/v1/vectore_stores/{vectore_store_id}/files"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/CreateVectorStoreFile", runtime.WithHTTPPathPattern("/v1/vector_stores/{vector_store_id}/files"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -933,7 +933,7 @@ func RegisterVectorStoreServiceHandlerClient(ctx context.Context, mux *runtime.S
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/ListVectorStoreFiles", runtime.WithHTTPPathPattern("/v1/vectore_stores/{vectore_store_id}/files"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/ListVectorStoreFiles", runtime.WithHTTPPathPattern("/v1/vector_stores/{vector_store_id}/files"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -953,7 +953,7 @@ func RegisterVectorStoreServiceHandlerClient(ctx context.Context, mux *runtime.S
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/GetVectorStoreFile", runtime.WithHTTPPathPattern("/v1/vectore_stores/{vectore_store_id}/files/{file_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/GetVectorStoreFile", runtime.WithHTTPPathPattern("/v1/vector_stores/{vector_store_id}/files/{file_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -973,7 +973,7 @@ func RegisterVectorStoreServiceHandlerClient(ctx context.Context, mux *runtime.S
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vectore_store.v1.VectorStoreService/DeleteVectorStoreFile", runtime.WithHTTPPathPattern("/v1/vectore_stores/{vectore_store_id}/files/{file_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.vector_store.v1.VectorStoreService/DeleteVectorStoreFile", runtime.WithHTTPPathPattern("/v1/vector_stores/{vector_store_id}/files/{file_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -993,23 +993,23 @@ func RegisterVectorStoreServiceHandlerClient(ctx context.Context, mux *runtime.S
 }
 
 var (
-	pattern_VectorStoreService_CreateVectorStore_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "vectore_stores"}, ""))
+	pattern_VectorStoreService_CreateVectorStore_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "vector_stores"}, ""))
 
-	pattern_VectorStoreService_ListVectorStores_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "vectore_stores"}, ""))
+	pattern_VectorStoreService_ListVectorStores_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "vector_stores"}, ""))
 
-	pattern_VectorStoreService_GetVectorStore_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "vectore_stores", "vectore_store_id"}, ""))
+	pattern_VectorStoreService_GetVectorStore_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "vector_stores", "vector_store_id"}, ""))
 
-	pattern_VectorStoreService_UpdateVectorStore_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "vectore_stores", "vectore_store_id"}, ""))
+	pattern_VectorStoreService_UpdateVectorStore_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "vector_stores", "vector_store_id"}, ""))
 
-	pattern_VectorStoreService_DeleteVectorStore_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "vectore_stores", "vectore_store_id"}, ""))
+	pattern_VectorStoreService_DeleteVectorStore_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "vector_stores", "vector_store_id"}, ""))
 
-	pattern_VectorStoreService_CreateVectorStoreFile_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"v1", "vectore_stores", "vectore_store_id", "files"}, ""))
+	pattern_VectorStoreService_CreateVectorStoreFile_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"v1", "vector_stores", "vector_store_id", "files"}, ""))
 
-	pattern_VectorStoreService_ListVectorStoreFiles_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"v1", "vectore_stores", "vectore_store_id", "files"}, ""))
+	pattern_VectorStoreService_ListVectorStoreFiles_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"v1", "vector_stores", "vector_store_id", "files"}, ""))
 
-	pattern_VectorStoreService_GetVectorStoreFile_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "vectore_stores", "vectore_store_id", "files", "file_id"}, ""))
+	pattern_VectorStoreService_GetVectorStoreFile_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "vector_stores", "vector_store_id", "files", "file_id"}, ""))
 
-	pattern_VectorStoreService_DeleteVectorStoreFile_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "vectore_stores", "vectore_store_id", "files", "file_id"}, ""))
+	pattern_VectorStoreService_DeleteVectorStoreFile_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "vector_stores", "vector_store_id", "files", "file_id"}, ""))
 )
 
 var (
