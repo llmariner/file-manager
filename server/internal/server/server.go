@@ -45,10 +45,15 @@ type noopReqIntercepter struct {
 
 func (n noopReqIntercepter) InterceptHTTPRequest(req *http.Request) (int, auth.UserInfo, error) {
 	ui := auth.UserInfo{
-		OrganizationID:      "default",
-		ProjectID:           defaultProjectID,
-		KubernetesNamespace: "default",
-		TenantID:            defaultTenantID,
+		OrganizationID: "default",
+		ProjectID:      defaultProjectID,
+		AssignedKubernetesEnvs: []auth.AssignedKubernetesEnv{
+			{
+				ClusterID: defaultClusterID,
+				Namespace: "default",
+			},
+		},
+		TenantID: defaultTenantID,
 	}
 	return http.StatusOK, ui, nil
 }
@@ -121,10 +126,15 @@ func (s *S) Stop() {
 func (s *S) extractUserInfoFromContext(ctx context.Context) (*auth.UserInfo, error) {
 	if !s.enableAuth {
 		return &auth.UserInfo{
-			OrganizationID:      "default",
-			ProjectID:           defaultProjectID,
-			KubernetesNamespace: "default",
-			TenantID:            defaultTenantID,
+			OrganizationID: "default",
+			ProjectID:      defaultProjectID,
+			AssignedKubernetesEnvs: []auth.AssignedKubernetesEnv{
+				{
+					ClusterID: defaultClusterID,
+					Namespace: "default",
+				},
+			},
+			TenantID: defaultTenantID,
 		}, nil
 	}
 	userInfo, ok := auth.ExtractUserInfoFromContext(ctx)
