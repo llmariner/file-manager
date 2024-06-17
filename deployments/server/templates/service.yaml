@@ -41,6 +41,8 @@ metadata:
   name: {{ include "file-manager-server.fullname" . }}-worker-service-grpc
   labels:
     {{- include "file-manager-server.labels" . | nindent 4 }}
+  annotations:
+    {{- toYaml .Values.global.workerServiceGrpcService.annotations | nindent 4 }}
 spec:
   type: ClusterIP
   ports:
