@@ -66,6 +66,7 @@ type Config struct {
 	GRPCPort              int `yaml:"grpcPort"`
 	HTTPPort              int `yaml:"httpPort"`
 	WorkerServiceGRPCPort int `yaml:"workerServiceGrpcPort"`
+	InternalGRPCPort      int `yaml:"internalGrpcPort"`
 
 	Database db.Config `yaml:"database"`
 
@@ -86,6 +87,9 @@ func (c *Config) Validate() error {
 	}
 	if c.WorkerServiceGRPCPort <= 0 {
 		return fmt.Errorf("workerServiceGrpcPort must be greater than 0")
+	}
+	if c.InternalGRPCPort <= 0 {
+		return fmt.Errorf("internalGrpcPort must be greater than 0")
 	}
 
 	if c.Debug.Standalone {

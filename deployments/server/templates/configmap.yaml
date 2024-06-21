@@ -9,6 +9,7 @@ data:
     httpPort: {{ .Values.httpPort }}
     grpcPort: {{ .Values.grpcPort }}
     workerServiceGrpcPort: {{ .Values.workerServiceGrpcPort }}
+    internalGrpcPort: {{ .Values.internalGrpcPort }}
     objectStore:
       s3:
         endpointUrl: {{ .Values.global.objectStore.s3.endpointUrl }}
