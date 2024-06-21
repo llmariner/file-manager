@@ -44,6 +44,7 @@ global:
 httpPort: 8080
 grpcPort: 8081
 workerServiceGrpcPort: 8082
+internalGrpcPort: 8083
 
 database:
   database: file_manager

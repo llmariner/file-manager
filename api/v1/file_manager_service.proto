@@ -78,3 +78,8 @@ service FilesWorkerService {
   rpc GetFilePath(GetFilePathRequest) returns (GetFilePathResponse) {
   }
 }
+
+service FilesInternalService {
+  rpc GetFilePath(GetFilePathRequest) returns (GetFilePathResponse) {
+  }
+}

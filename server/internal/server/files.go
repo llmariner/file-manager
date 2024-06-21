@@ -225,6 +225,27 @@ func (s *WS) GetFilePath(
 	}, nil
 }
 
+// GetFilePath gets a file path.
+func (s *IS) GetFilePath(
+	ctx context.Context,
+	req *v1.GetFilePathRequest,
+) (*v1.GetFilePathResponse, error) {
+	if req.Id == "" {
+		return nil, status.Error(codes.InvalidArgument, "id is required")
+	}
+
+	f, err := s.store.GetFileByFileID(req.Id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, status.Errorf(codes.NotFound, "file %q not found", req.Id)
+		}
+		return nil, status.Errorf(codes.Internal, "get file: %s", err)
+	}
+	return &v1.GetFilePathResponse{
+		Path: f.ObjectStorePath,
+	}, nil
+}
+
 func (s *S) filePath(key string) string {
 	return fmt.Sprintf("%s/%s", s.pathPrefix, key)
 }
