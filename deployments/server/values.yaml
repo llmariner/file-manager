@@ -55,7 +55,7 @@ objectStore:
 
 replicaCount: 1
 image:
-  repository: public.ecr.aws/v8n3t7y5/llm-operator/file-manager-server
+  repository: public.ecr.aws/cloudnatix/llm-operator/file-manager-server
   pullPolicy: IfNotPresent
 
 version:
