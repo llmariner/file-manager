@@ -58,4 +58,9 @@ image:
   repository: public.ecr.aws/cloudnatix/llm-operator/file-manager-server
   pullPolicy: IfNotPresent
 
+podAnnotations:
+nodeSelector:
+affinity:
+tolerations:
+
 version:
