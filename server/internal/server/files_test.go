@@ -141,4 +141,5 @@ func TestGetFilePath(t *testing.T) {
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, "path0", got.Path)
+	assert.Equal(t, "filename0", got.Filename)
 }

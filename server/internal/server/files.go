@@ -221,7 +221,8 @@ func (s *WS) GetFilePath(
 		return nil, status.Errorf(codes.Internal, "get file: %s", err)
 	}
 	return &v1.GetFilePathResponse{
-		Path: f.ObjectStorePath,
+		Path:     f.ObjectStorePath,
+		Filename: f.Filename,
 	}, nil
 }
 
@@ -242,7 +243,8 @@ func (s *IS) GetFilePath(
 		return nil, status.Errorf(codes.Internal, "get file: %s", err)
 	}
 	return &v1.GetFilePathResponse{
-		Path: f.ObjectStorePath,
+		Path:     f.ObjectStorePath,
+		Filename: f.Filename,
 	}, nil
 }
 

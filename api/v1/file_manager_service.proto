@@ -72,6 +72,7 @@ message GetFilePathRequest {
 
 message GetFilePathResponse {
   string path = 1;
+  string filename = 2;
 }
 
 service FilesWorkerService {

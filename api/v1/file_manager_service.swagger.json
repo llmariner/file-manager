@@ -134,6 +134,7 @@
         "details": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
         }
@@ -183,6 +184,9 @@
       "properties": {
         "path": {
           "type": "string"
+        },
+        "filename": {
+          "type": "string"
         }
       }
     },
@@ -195,6 +199,7 @@
         "data": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1File"
           }
         }
