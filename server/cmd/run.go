@@ -14,7 +14,7 @@ import (
 	"github.com/llm-operator/file-manager/server/internal/s3"
 	"github.com/llm-operator/file-manager/server/internal/server"
 	"github.com/llm-operator/file-manager/server/internal/store"
-	"github.com/llm-operator/rbac-manager/pkg/auth"
+	"github.com/llmariner/rbac-manager/pkg/auth"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
