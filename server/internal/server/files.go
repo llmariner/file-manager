@@ -8,9 +8,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/llm-operator/common/pkg/id"
 	v1 "github.com/llm-operator/file-manager/api/v1"
 	"github.com/llm-operator/file-manager/server/internal/store"
+	"github.com/llmariner/common/pkg/id"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
@@ -70,7 +70,7 @@ func (s *S) CreateFile(
 	}
 
 	path := s.filePath(fileID)
-	if err := s.s3Client.Upload(file, path); err != nil {
+	if err := s.s3Client.Upload(req.Context(), file, path); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

@@ -8,12 +8,12 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 
-	"github.com/llm-operator/common/pkg/db"
 	v1 "github.com/llm-operator/file-manager/api/v1"
 	"github.com/llm-operator/file-manager/server/internal/config"
 	"github.com/llm-operator/file-manager/server/internal/s3"
 	"github.com/llm-operator/file-manager/server/internal/server"
 	"github.com/llm-operator/file-manager/server/internal/store"
+	"github.com/llmariner/common/pkg/db"
 	"github.com/llmariner/rbac-manager/pkg/auth"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
@@ -98,7 +98,10 @@ func run(ctx context.Context, c *config.Config) error {
 		s3Client = &server.NoopS3Client{}
 	} else {
 		s3conf := c.ObjectStore.S3
-		s3Client = s3.NewClient(s3conf)
+		s3Client, err = s3.NewClient(ctx, s3conf)
+		if err != nil {
+			return err
+		}
 		pathPrefix = s3conf.PathPrefix
 	}
 	s := server.New(st, s3Client, pathPrefix)

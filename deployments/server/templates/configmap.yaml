@@ -16,6 +16,13 @@ data:
         region: {{ .Values.global.objectStore.s3.region }}
         bucket: {{ .Values.global.objectStore.s3.bucket }}
         pathPrefix: {{ .Values.objectStore.s3.pathPrefix }}
+        {{- with .Values.global.objectStore.s3.assumeRole }}
+        {{- if .roleArn }}
+	assumeRole:
+          roleArn: {{ .roleArn }}
+          externalId: {{ .externalId }}
+        {{- end }}
+        {{- end }}
     database:
       host: {{ .Values.global.database.host }}
       port: {{ .Values.global.database.port }}
