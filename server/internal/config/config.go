@@ -4,9 +4,22 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/llm-operator/common/pkg/db"
+	"github.com/llmariner/common/pkg/db"
 	"gopkg.in/yaml.v3"
 )
+
+// AssumeRoleConfig is the assume role configuration.
+type AssumeRoleConfig struct {
+	RoleARN    string `yaml:"roleArn"`
+	ExternalID string `yaml:"externalId"`
+}
+
+func (c *AssumeRoleConfig) validate() error {
+	if c.RoleARN == "" {
+		return fmt.Errorf("roleArn must be set")
+	}
+	return nil
+}
 
 // S3Config is the S3 configuration.
 type S3Config struct {
@@ -14,6 +27,8 @@ type S3Config struct {
 	Region      string `yaml:"region"`
 	Bucket      string `yaml:"bucket"`
 	PathPrefix  string `yaml:"pathPrefix"`
+
+	AssumeRole *AssumeRoleConfig `yaml:"assumeRole"`
 }
 
 // ObjectStoreConfig is the object store configuration.
@@ -31,6 +46,11 @@ func (c *ObjectStoreConfig) Validate() error {
 	}
 	if c.S3.PathPrefix == "" {
 		return fmt.Errorf("s3 path prefix must be set")
+	}
+	if ar := c.S3.AssumeRole; ar != nil {
+		if err := ar.validate(); err != nil {
+			return fmt.Errorf("assumeRole: %s", err)
+		}
 	}
 	return nil
 }

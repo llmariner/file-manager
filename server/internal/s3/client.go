@@ -1,13 +1,14 @@
 package s3
 
 import (
+	"context"
 	"io"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/llm-operator/file-manager/server/internal/config"
+	laws "github.com/llmariner/common/pkg/aws"
 )
 
 const (
@@ -15,34 +16,40 @@ const (
 )
 
 // NewClient returns a new S3 client.
-func NewClient(c config.S3Config) *Client {
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: session.SharedConfigEnable,
-	}))
-	conf := &aws.Config{
-		Endpoint: aws.String(c.EndpointURL),
-		Region:   aws.String(c.Region),
-		// This is needed as the minio server does not support the virtual host style.
-		S3ForcePathStyle: aws.Bool(true),
+func NewClient(ctx context.Context, c config.S3Config) (*Client, error) {
+	opts := laws.NewS3ClientOptions{
+		EndpointURL: c.EndpointURL,
+		Region:      c.Region,
 	}
+	if ar := c.AssumeRole; ar != nil {
+		opts.AssumeRole = &laws.AssumeRole{
+			RoleARN:    ar.RoleARN,
+			ExternalID: ar.ExternalID,
+		}
+	}
+	svc, err := laws.NewS3Client(ctx, opts)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Client{
-		svc:    s3.New(sess, conf),
+		svc:    svc,
 		bucket: c.Bucket,
-	}
+	}, nil
 }
 
 // Client is a client for S3.
 type Client struct {
-	svc    *s3.S3
+	svc    *s3.Client
 	bucket string
 }
 
 // Upload uploads the data that buf contains to a S3 object.
-func (c *Client) Upload(r io.Reader, key string) error {
-	uploader := s3manager.NewUploaderWithClient(c.svc, func(u *s3manager.Uploader) {
+func (c *Client) Upload(ctx context.Context, r io.Reader, key string) error {
+	uploader := manager.NewUploader(c.svc, func(u *manager.Uploader) {
 		u.PartSize = partMiBs * 1024 * 1024
 	})
-	_, err := uploader.Upload(&s3manager.UploadInput{
+	_, err := uploader.Upload(ctx, &s3.PutObjectInput{
 		Bucket: aws.String(c.bucket),
 		Key:    aws.String(key),
 		Body:   r,

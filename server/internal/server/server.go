@@ -27,14 +27,14 @@ const (
 
 // S3Client is an interface for an S3 client.
 type S3Client interface {
-	Upload(r io.Reader, key string) error
+	Upload(ctx context.Context, r io.Reader, key string) error
 }
 
 // NoopS3Client is a no-op S3 client.
 type NoopS3Client struct{}
 
 // Upload is a no-op implementation of Upload.
-func (n *NoopS3Client) Upload(r io.Reader, key string) error {
+func (n *NoopS3Client) Upload(ctx context.Context, r io.Reader, key string) error {
 	return nil
 }
 
