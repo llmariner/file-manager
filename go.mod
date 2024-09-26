@@ -3,7 +3,6 @@ module github.com/llm-operator/file-manager
 go 1.22.2
 
 require (
-	github.com/aws/aws-sdk-go v1.51.19
 	github.com/aws/aws-sdk-go-v2 v1.31.0
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.24
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.63.2
