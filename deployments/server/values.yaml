@@ -58,6 +58,10 @@ objectStore:
     pathPrefix: files
 
 replicaCount: 1
+
+serviceAccount:
+  create: true
+
 image:
   repository: public.ecr.aws/cloudnatix/llm-operator/file-manager-server
   pullPolicy: IfNotPresent
