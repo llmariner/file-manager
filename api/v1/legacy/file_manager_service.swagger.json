@@ -7,9 +7,6 @@
   "tags": [
     {
       "name": "FilesWorkerService"
-    },
-    {
-      "name": "FilesInternalService"
     }
   ],
   "consumes": [

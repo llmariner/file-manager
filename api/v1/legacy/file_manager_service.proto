@@ -11,8 +11,3 @@ service FilesWorkerService {
   rpc GetFilePath(llmariner.files.server.v1.GetFilePathRequest) returns (llmariner.files.server.v1.GetFilePathResponse) {
   }
 }
-
-service FilesInternalService {
-  rpc GetFilePath(llmariner.files.server.v1.GetFilePathRequest) returns (llmariner.files.server.v1.GetFilePathResponse) {
-  }
-}
