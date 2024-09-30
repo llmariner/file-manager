@@ -33,7 +33,7 @@ func NewFilesServiceClient(cc grpc.ClientConnInterface) FilesServiceClient {
 
 func (c *filesServiceClient) ListFiles(ctx context.Context, in *ListFilesRequest, opts ...grpc.CallOption) (*ListFilesResponse, error) {
 	out := new(ListFilesResponse)
-	err := c.cc.Invoke(ctx, "/llmoperator.files.server.v1.FilesService/ListFiles", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/llmariner.files.server.v1.FilesService/ListFiles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +42,7 @@ func (c *filesServiceClient) ListFiles(ctx context.Context, in *ListFilesRequest
 
 func (c *filesServiceClient) GetFile(ctx context.Context, in *GetFileRequest, opts ...grpc.CallOption) (*File, error) {
 	out := new(File)
-	err := c.cc.Invoke(ctx, "/llmoperator.files.server.v1.FilesService/GetFile", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/llmariner.files.server.v1.FilesService/GetFile", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (c *filesServiceClient) GetFile(ctx context.Context, in *GetFileRequest, op
 
 func (c *filesServiceClient) DeleteFile(ctx context.Context, in *DeleteFileRequest, opts ...grpc.CallOption) (*DeleteFileResponse, error) {
 	out := new(DeleteFileResponse)
-	err := c.cc.Invoke(ctx, "/llmoperator.files.server.v1.FilesService/DeleteFile", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/llmariner.files.server.v1.FilesService/DeleteFile", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +104,7 @@ func _FilesService_ListFiles_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/llmoperator.files.server.v1.FilesService/ListFiles",
+		FullMethod: "/llmariner.files.server.v1.FilesService/ListFiles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FilesServiceServer).ListFiles(ctx, req.(*ListFilesRequest))
@@ -122,7 +122,7 @@ func _FilesService_GetFile_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/llmoperator.files.server.v1.FilesService/GetFile",
+		FullMethod: "/llmariner.files.server.v1.FilesService/GetFile",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FilesServiceServer).GetFile(ctx, req.(*GetFileRequest))
@@ -140,7 +140,7 @@ func _FilesService_DeleteFile_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/llmoperator.files.server.v1.FilesService/DeleteFile",
+		FullMethod: "/llmariner.files.server.v1.FilesService/DeleteFile",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FilesServiceServer).DeleteFile(ctx, req.(*DeleteFileRequest))
@@ -152,7 +152,7 @@ func _FilesService_DeleteFile_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var FilesService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "llmoperator.files.server.v1.FilesService",
+	ServiceName: "llmariner.files.server.v1.FilesService",
 	HandlerType: (*FilesServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -189,7 +189,7 @@ func NewFilesWorkerServiceClient(cc grpc.ClientConnInterface) FilesWorkerService
 
 func (c *filesWorkerServiceClient) GetFilePath(ctx context.Context, in *GetFilePathRequest, opts ...grpc.CallOption) (*GetFilePathResponse, error) {
 	out := new(GetFilePathResponse)
-	err := c.cc.Invoke(ctx, "/llmoperator.files.server.v1.FilesWorkerService/GetFilePath", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/llmariner.files.server.v1.FilesWorkerService/GetFilePath", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -234,7 +234,7 @@ func _FilesWorkerService_GetFilePath_Handler(srv interface{}, ctx context.Contex
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/llmoperator.files.server.v1.FilesWorkerService/GetFilePath",
+		FullMethod: "/llmariner.files.server.v1.FilesWorkerService/GetFilePath",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FilesWorkerServiceServer).GetFilePath(ctx, req.(*GetFilePathRequest))
@@ -246,7 +246,7 @@ func _FilesWorkerService_GetFilePath_Handler(srv interface{}, ctx context.Contex
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var FilesWorkerService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "llmoperator.files.server.v1.FilesWorkerService",
+	ServiceName: "llmariner.files.server.v1.FilesWorkerService",
 	HandlerType: (*FilesWorkerServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -275,7 +275,7 @@ func NewFilesInternalServiceClient(cc grpc.ClientConnInterface) FilesInternalSer
 
 func (c *filesInternalServiceClient) GetFilePath(ctx context.Context, in *GetFilePathRequest, opts ...grpc.CallOption) (*GetFilePathResponse, error) {
 	out := new(GetFilePathResponse)
-	err := c.cc.Invoke(ctx, "/llmoperator.files.server.v1.FilesInternalService/GetFilePath", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/llmariner.files.server.v1.FilesInternalService/GetFilePath", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -320,7 +320,7 @@ func _FilesInternalService_GetFilePath_Handler(srv interface{}, ctx context.Cont
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/llmoperator.files.server.v1.FilesInternalService/GetFilePath",
+		FullMethod: "/llmariner.files.server.v1.FilesInternalService/GetFilePath",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FilesInternalServiceServer).GetFilePath(ctx, req.(*GetFilePathRequest))
@@ -332,7 +332,7 @@ func _FilesInternalService_GetFilePath_Handler(srv interface{}, ctx context.Cont
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var FilesInternalService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "llmoperator.files.server.v1.FilesInternalService",
+	ServiceName: "llmariner.files.server.v1.FilesInternalService",
 	HandlerType: (*FilesInternalServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package llmoperator.files.server.v1;
+
+import "google/api/annotations.proto";
+import "api/v1/file_manager_service.proto";
+
+option go_package = "github.com/llm-operator/file-manager/api/v1/legacy";
+
+service FilesWorkerService {
+  rpc GetFilePath(llmariner.files.server.v1.GetFilePathRequest) returns (llmariner.files.server.v1.GetFilePathResponse) {
+  }
+}
+
+service FilesInternalService {
+  rpc GetFilePath(llmariner.files.server.v1.GetFilePathRequest) returns (llmariner.files.server.v1.GetFilePathResponse) {
+  }
+}

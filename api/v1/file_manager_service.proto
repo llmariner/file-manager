@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package llmoperator.files.server.v1;
+package llmariner.files.server.v1;
 
 import "google/api/annotations.proto";
 

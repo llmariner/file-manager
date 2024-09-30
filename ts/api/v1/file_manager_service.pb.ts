@@ -59,11 +59,11 @@ export class FilesService {
 }
 export class FilesWorkerService {
   static GetFilePath(req: GetFilePathRequest, initReq?: fm.InitReq): Promise<GetFilePathResponse> {
-    return fm.fetchReq<GetFilePathRequest, GetFilePathResponse>(`/llmoperator.files.server.v1.FilesWorkerService/GetFilePath`, {...initReq, method: "POST", body: JSON.stringify(req)})
+    return fm.fetchReq<GetFilePathRequest, GetFilePathResponse>(`/llmariner.files.server.v1.FilesWorkerService/GetFilePath`, {...initReq, method: "POST", body: JSON.stringify(req)})
   }
 }
 export class FilesInternalService {
   static GetFilePath(req: GetFilePathRequest, initReq?: fm.InitReq): Promise<GetFilePathResponse> {
-    return fm.fetchReq<GetFilePathRequest, GetFilePathResponse>(`/llmoperator.files.server.v1.FilesInternalService/GetFilePath`, {...initReq, method: "POST", body: JSON.stringify(req)})
+    return fm.fetchReq<GetFilePathRequest, GetFilePathResponse>(`/llmariner.files.server.v1.FilesInternalService/GetFilePath`, {...initReq, method: "POST", body: JSON.stringify(req)})
   }
 }

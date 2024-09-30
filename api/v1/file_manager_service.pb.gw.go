@@ -183,7 +183,7 @@ func RegisterFilesServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.files.server.v1.FilesService/ListFiles", runtime.WithHTTPPathPattern("/v1/files"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmariner.files.server.v1.FilesService/ListFiles", runtime.WithHTTPPathPattern("/v1/files"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -206,7 +206,7 @@ func RegisterFilesServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.files.server.v1.FilesService/GetFile", runtime.WithHTTPPathPattern("/v1/files/{id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmariner.files.server.v1.FilesService/GetFile", runtime.WithHTTPPathPattern("/v1/files/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -229,7 +229,7 @@ func RegisterFilesServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.files.server.v1.FilesService/DeleteFile", runtime.WithHTTPPathPattern("/v1/files/{id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmariner.files.server.v1.FilesService/DeleteFile", runtime.WithHTTPPathPattern("/v1/files/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -291,7 +291,7 @@ func RegisterFilesServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.files.server.v1.FilesService/ListFiles", runtime.WithHTTPPathPattern("/v1/files"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmariner.files.server.v1.FilesService/ListFiles", runtime.WithHTTPPathPattern("/v1/files"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -311,7 +311,7 @@ func RegisterFilesServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.files.server.v1.FilesService/GetFile", runtime.WithHTTPPathPattern("/v1/files/{id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmariner.files.server.v1.FilesService/GetFile", runtime.WithHTTPPathPattern("/v1/files/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -331,7 +331,7 @@ func RegisterFilesServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.files.server.v1.FilesService/DeleteFile", runtime.WithHTTPPathPattern("/v1/files/{id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmariner.files.server.v1.FilesService/DeleteFile", runtime.WithHTTPPathPattern("/v1/files/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

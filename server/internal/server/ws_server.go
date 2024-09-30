@@ -7,6 +7,7 @@ import (
 	"net"
 
 	v1 "github.com/llm-operator/file-manager/api/v1"
+	v1legacy "github.com/llm-operator/file-manager/api/v1/legacy"
 	"github.com/llm-operator/file-manager/server/internal/config"
 	"github.com/llm-operator/file-manager/server/internal/store"
 	"github.com/llmariner/rbac-manager/pkg/auth"
@@ -27,9 +28,14 @@ func NewWorkerServiceServer(s *store.S) *WS {
 	}
 }
 
+// nolint:unused
+type legacyWorkerServer = v1legacy.UnimplementedFilesWorkerServiceServer
+
 // WS is a server for worker services.
 type WS struct {
 	v1.UnimplementedFilesWorkerServiceServer
+	// nolint:unused
+	legacyWorkerServer
 
 	srv   *grpc.Server
 	store *store.S
@@ -55,6 +61,7 @@ func (ws *WS) Run(ctx context.Context, port int, authConfig config.AuthConfig) e
 
 	srv := grpc.NewServer(opts...)
 	v1.RegisterFilesWorkerServiceServer(srv, ws)
+	v1legacy.RegisterFilesWorkerServiceServer(srv, ws)
 	reflection.Register(srv)
 
 	ws.srv = srv
