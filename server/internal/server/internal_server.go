@@ -6,7 +6,6 @@ import (
 	"net"
 
 	v1 "github.com/llmariner/file-manager/api/v1"
-	v1legacy "github.com/llmariner/file-manager/api/v1/legacy"
 	"github.com/llmariner/file-manager/server/internal/store"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -19,14 +18,9 @@ func NewInternal(store *store.S) *IS {
 	}
 }
 
-// nolint:unused
-type legacyInternalServer = v1legacy.UnimplementedFilesInternalServiceServer
-
 // IS is an internal server.
 type IS struct {
 	v1.UnimplementedFilesInternalServiceServer
-	// nolint:unused
-	legacyInternalServer
 
 	srv *grpc.Server
 
@@ -39,7 +33,6 @@ func (s *IS) Run(port int) error {
 
 	grpcServer := grpc.NewServer()
 	v1.RegisterFilesInternalServiceServer(grpcServer, s)
-	v1legacy.RegisterFilesInternalServiceServer(grpcServer, s)
 	reflection.Register(grpcServer)
 
 	s.srv = grpcServer
