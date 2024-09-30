@@ -7,7 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/llm-operator/file-manager/server/internal/config"
+	"github.com/llmariner/file-manager/server/internal/config"
 	laws "github.com/llmariner/common/pkg/aws"
 )
 

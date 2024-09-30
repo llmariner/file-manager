@@ -8,9 +8,9 @@ import (
 	"net"
 	"net/http"
 
-	v1 "github.com/llm-operator/file-manager/api/v1"
-	"github.com/llm-operator/file-manager/server/internal/config"
-	"github.com/llm-operator/file-manager/server/internal/store"
+	v1 "github.com/llmariner/file-manager/api/v1"
+	"github.com/llmariner/file-manager/server/internal/config"
+	"github.com/llmariner/file-manager/server/internal/store"
 	"github.com/llmariner/rbac-manager/pkg/auth"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

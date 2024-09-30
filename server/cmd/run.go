@@ -8,11 +8,11 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 
-	v1 "github.com/llm-operator/file-manager/api/v1"
-	"github.com/llm-operator/file-manager/server/internal/config"
-	"github.com/llm-operator/file-manager/server/internal/s3"
-	"github.com/llm-operator/file-manager/server/internal/server"
-	"github.com/llm-operator/file-manager/server/internal/store"
+	v1 "github.com/llmariner/file-manager/api/v1"
+	"github.com/llmariner/file-manager/server/internal/config"
+	"github.com/llmariner/file-manager/server/internal/s3"
+	"github.com/llmariner/file-manager/server/internal/server"
+	"github.com/llmariner/file-manager/server/internal/store"
 	"github.com/llmariner/common/pkg/db"
 	"github.com/llmariner/rbac-manager/pkg/auth"
 	"github.com/spf13/cobra"

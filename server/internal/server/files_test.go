@@ -9,8 +9,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	v1 "github.com/llm-operator/file-manager/api/v1"
-	"github.com/llm-operator/file-manager/server/internal/store"
+	v1 "github.com/llmariner/file-manager/api/v1"
+	"github.com/llmariner/file-manager/server/internal/store"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

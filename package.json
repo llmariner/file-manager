@@ -1,5 +1,5 @@
 {
-  "name": "@llm-operator-types/file-manager",
+  "name": "@llmariner-types/file-manager",
   "version": "1.0.0",
   "description": "file-manager",
   "main": "dist/index.js",
@@ -17,12 +17,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/llm-operator/file-manager.git"
+    "url": "git+https://github.com/llmariner/file-manager.git"
   },
-  "author": "llm-operator",
+  "author": "llmariner",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/llm-operator/file-manager/issues"
+    "url": "https://github.com/llmariner/file-manager/issues"
   },
-  "homepage": "https://github.com/llm-operator/file-manager#readme"
+  "homepage": "https://github.com/llmariner/file-manager#readme"
 }

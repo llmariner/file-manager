@@ -8,8 +8,8 @@ import (
 	"log"
 	"net/http"
 
-	v1 "github.com/llm-operator/file-manager/api/v1"
-	"github.com/llm-operator/file-manager/server/internal/store"
+	v1 "github.com/llmariner/file-manager/api/v1"
+	"github.com/llmariner/file-manager/server/internal/store"
 	"github.com/llmariner/common/pkg/id"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
