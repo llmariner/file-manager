@@ -17,11 +17,11 @@ export class FilesService {
 }
 export class FilesWorkerService {
     static GetFilePath(req, initReq) {
-        return fm.fetchReq(`/llmoperator.files.server.v1.FilesWorkerService/GetFilePath`, Object.assign(Object.assign({}, initReq), { method: "POST", body: JSON.stringify(req) }));
+        return fm.fetchReq(`/llmariner.files.server.v1.FilesWorkerService/GetFilePath`, Object.assign(Object.assign({}, initReq), { method: "POST", body: JSON.stringify(req) }));
     }
 }
 export class FilesInternalService {
     static GetFilePath(req, initReq) {
-        return fm.fetchReq(`/llmoperator.files.server.v1.FilesInternalService/GetFilePath`, Object.assign(Object.assign({}, initReq), { method: "POST", body: JSON.stringify(req) }));
+        return fm.fetchReq(`/llmariner.files.server.v1.FilesInternalService/GetFilePath`, Object.assign(Object.assign({}, initReq), { method: "POST", body: JSON.stringify(req) }));
     }
 }
