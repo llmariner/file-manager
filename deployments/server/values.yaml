@@ -63,7 +63,7 @@ serviceAccount:
   create: true
 
 image:
-  repository: public.ecr.aws/cloudnatix/llm-operator/file-manager-server
+  repository: public.ecr.aws/cloudnatix/llmariner/file-manager-server
   pullPolicy: IfNotPresent
 
 podAnnotations:

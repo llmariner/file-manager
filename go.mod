@@ -1,4 +1,4 @@
-module github.com/llm-operator/file-manager
+module github.com/llmariner/file-manager
 
 go 1.22.2
 
