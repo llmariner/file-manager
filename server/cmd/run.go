@@ -9,6 +9,7 @@ import (
 	"github.com/go-logr/stdr"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 
+	"github.com/llmariner/api-usage/pkg/sender"
 	"github.com/llmariner/common/pkg/db"
 	v1 "github.com/llmariner/file-manager/api/v1"
 	"github.com/llmariner/file-manager/server/internal/config"
@@ -96,6 +97,11 @@ func run(ctx context.Context, c *config.Config) error {
 		return err
 	}
 
+	usage, err := sender.New(ctx, c.UsageSender, grpc.WithTransportCredentials(insecure.NewCredentials()), logger)
+	if err != nil {
+		return err
+	}
+
 	var s3Client server.S3Client
 	var pathPrefix string
 	if c.Debug.Standalone {
@@ -108,7 +114,7 @@ func run(ctx context.Context, c *config.Config) error {
 		}
 		pathPrefix = s3conf.PathPrefix
 	}
-	s := server.New(st, s3Client, pathPrefix, logger)
+	s := server.New(st, s3Client, usage, pathPrefix, logger)
 	createFile := runtime.MustPattern(runtime.NewPattern(
 		1,
 		[]int{2, 0, 2, 1},
@@ -123,6 +129,8 @@ func run(ctx context.Context, c *config.Config) error {
 		"",
 	))
 	mux.Handle("Get", getFileContent, s.GetFileContent)
+
+	go func() { usage.Run(ctx) }()
 
 	errCh := make(chan error)
 	go func() {
