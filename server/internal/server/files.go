@@ -6,10 +6,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
+	auv1 "github.com/llmariner/api-usage/api/v1"
 	"github.com/llmariner/common/pkg/id"
 	v1 "github.com/llmariner/file-manager/api/v1"
 	"github.com/llmariner/file-manager/server/internal/store"
+	"github.com/llmariner/rbac-manager/pkg/auth"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
@@ -26,24 +29,39 @@ func (s *S) CreateFile(
 	req *http.Request,
 	pathParams map[string]string,
 ) {
+	start := time.Now()
 	status, userInfo, err := s.reqIntercepter.InterceptHTTPRequest(req)
 	if err != nil {
 		http.Error(w, err.Error(), status)
 		return
 	}
 
+	usage := auv1.UsageRecord{
+		User:         userInfo.InternalUserID,
+		Tenant:       userInfo.TenantID,
+		Organization: userInfo.OrganizationID,
+		Project:      userInfo.ProjectID,
+		ApiMethod:    "/llmariner.files.server.v1.FileService/CreateFile",
+		StatusCode:   http.StatusOK,
+		Timestamp:    start.UnixNano(),
+	}
+	defer func() {
+		usage.LatencyMs = int32(time.Since(start).Milliseconds())
+		s.usage.AddUsage(&usage)
+	}()
+
 	if err := req.ParseMultipartForm(10 << 20); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		httpError(w, err.Error(), http.StatusBadRequest, &usage)
 		return
 	}
 
 	purpose := req.FormValue("purpose")
 	if purpose == "" {
-		http.Error(w, "purpose is required", http.StatusBadRequest)
+		httpError(w, "purpose is required", http.StatusBadRequest, &usage)
 		return
 	}
 	if err := validatePurpose(purpose); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		httpError(w, err.Error(), http.StatusBadRequest, &usage)
 		return
 	}
 
@@ -54,7 +72,7 @@ func (s *S) CreateFile(
 			http.Error(w, "file is required", http.StatusBadRequest)
 			return
 		}
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		httpError(w, err.Error(), http.StatusBadRequest, &usage)
 		return
 	}
 	defer func() {
@@ -64,13 +82,13 @@ func (s *S) CreateFile(
 	s.log.Info("Uploading the file to S3")
 	fileID, err := id.GenerateID("file-", 24)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("generate file id: %s", err.Error()), http.StatusInternalServerError)
+		httpError(w, fmt.Sprintf("generate file id: %s", err.Error()), http.StatusInternalServerError, &usage)
 		return
 	}
 
 	path := s.filePath(fileID)
 	if err := s.s3Client.Upload(req.Context(), file, path); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		httpError(w, err.Error(), http.StatusInternalServerError, &usage)
 		return
 	}
 	s.log.Info("Uploaded the file", "header(bytes)", header.Size)
@@ -88,19 +106,19 @@ func (s *S) CreateFile(
 		ObjectStorePath: path,
 	})
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		httpError(w, err.Error(), http.StatusBadRequest, &usage)
 		return
 	}
 
 	fj := toFileJSON(f)
 	b, err := json.Marshal(fj)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		httpError(w, err.Error(), http.StatusInternalServerError, &usage)
 		return
 	}
 	w.WriteHeader(http.StatusCreated)
 	if _, err := w.Write(b); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		httpError(w, err.Error(), http.StatusInternalServerError, &usage)
 		return
 	}
 }
@@ -119,12 +137,13 @@ func (s *S) ListFiles(
 	ctx context.Context,
 	req *v1.ListFilesRequest,
 ) (*v1.ListFilesResponse, error) {
-	userInfo, err := s.extractUserInfoFromContext(ctx)
-	if err != nil {
-		return nil, err
+	userInfo, ok := auth.ExtractUserInfoFromContext(ctx)
+	if !ok {
+		return nil, fmt.Errorf("failed to extract user info from context")
 	}
 
 	var fs []*store.File
+	var err error
 	if p := req.Purpose; p != "" {
 		if err := validatePurpose(p); err != nil {
 			return nil, err
@@ -152,9 +171,9 @@ func (s *S) GetFile(
 	ctx context.Context,
 	req *v1.GetFileRequest,
 ) (*v1.File, error) {
-	userInfo, err := s.extractUserInfoFromContext(ctx)
-	if err != nil {
-		return nil, err
+	userInfo, ok := auth.ExtractUserInfoFromContext(ctx)
+	if !ok {
+		return nil, fmt.Errorf("failed to extract user info from context")
 	}
 
 	if req.Id == "" {
@@ -176,9 +195,9 @@ func (s *S) DeleteFile(
 	ctx context.Context,
 	req *v1.DeleteFileRequest,
 ) (*v1.DeleteFileResponse, error) {
-	userInfo, err := s.extractUserInfoFromContext(ctx)
-	if err != nil {
-		return nil, err
+	userInfo, ok := auth.ExtractUserInfoFromContext(ctx)
+	if !ok {
+		return nil, fmt.Errorf("failed to extract user info from context")
 	}
 
 	if req.Id == "" {
@@ -289,4 +308,9 @@ func toFileJSON(f *store.File) *fileJSON {
 		Object:    "file",
 		Purpose:   f.Purpose,
 	}
+}
+
+func httpError(w http.ResponseWriter, error string, code int, usage *auv1.UsageRecord) {
+	usage.StatusCode = int32(code)
+	http.Error(w, error, code)
 }

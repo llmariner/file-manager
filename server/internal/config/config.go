@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/llmariner/api-usage/pkg/sender"
 	"github.com/llmariner/common/pkg/db"
 	"gopkg.in/yaml.v3"
 )
@@ -85,13 +86,13 @@ type Config struct {
 	WorkerServiceGRPCPort int `yaml:"workerServiceGrpcPort"`
 	InternalGRPCPort      int `yaml:"internalGrpcPort"`
 
-	Database db.Config `yaml:"database"`
-
+	Database    db.Config         `yaml:"database"`
 	ObjectStore ObjectStoreConfig `yaml:"objectStore"`
 
-	Debug DebugConfig `yaml:"debug"`
+	AuthConfig  AuthConfig    `yaml:"auth"`
+	UsageSender sender.Config `yaml:"usageSender"`
 
-	AuthConfig AuthConfig `yaml:"auth"`
+	Debug DebugConfig `yaml:"debug"`
 }
 
 // Validate validates the configuration.
@@ -124,6 +125,9 @@ func (c *Config) Validate() error {
 	}
 
 	if err := c.AuthConfig.Validate(); err != nil {
+		return err
+	}
+	if err := c.UsageSender.Validate(); err != nil {
 		return err
 	}
 	return nil

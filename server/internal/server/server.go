@@ -8,16 +8,15 @@ import (
 	"net/http"
 
 	"github.com/go-logr/logr"
+	"github.com/llmariner/api-usage/pkg/sender"
 	v1 "github.com/llmariner/file-manager/api/v1"
 	"github.com/llmariner/file-manager/server/internal/config"
 	"github.com/llmariner/file-manager/server/internal/store"
 	"github.com/llmariner/rbac-manager/pkg/auth"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
-	"google.golang.org/grpc/status"
 )
 
 const (
@@ -61,10 +60,11 @@ func (n noopReqIntercepter) InterceptHTTPRequest(req *http.Request) (int, auth.U
 }
 
 // New creates a server.
-func New(store *store.S, s3Client S3Client, pathPrefix string, log logr.Logger) *S {
+func New(store *store.S, s3Client S3Client, sender sender.UsageSetter, pathPrefix string, log logr.Logger) *S {
 	return &S{
 		store:          store,
 		s3Client:       s3Client,
+		usage:          sender,
 		log:            log.WithName("grpc"),
 		pathPrefix:     pathPrefix,
 		reqIntercepter: noopReqIntercepter{},
@@ -79,19 +79,19 @@ type S struct {
 
 	store    *store.S
 	s3Client S3Client
+	usage    sender.UsageSetter
 	log      logr.Logger
 
 	pathPrefix string
 
 	reqIntercepter reqIntercepter
-	enableAuth     bool
 }
 
 // Run starts the gRPC server.
 func (s *S) Run(ctx context.Context, port int, authConfig config.AuthConfig) error {
 	s.log.Info("Starting gRPC server...", "port", port)
 
-	var opts []grpc.ServerOption
+	var opt grpc.ServerOption
 	if authConfig.Enable {
 		ai, err := auth.NewInterceptor(ctx, auth.Config{
 			RBACServerAddr: authConfig.RBACInternalServerAddr,
@@ -100,21 +100,16 @@ func (s *S) Run(ctx context.Context, port int, authConfig config.AuthConfig) err
 		if err != nil {
 			return err
 		}
-		authFn := ai.Unary()
-		healthSkip := func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
-			if info.FullMethod == "/grpc.health.v1.Health/Check" {
-				// Skip authentication for health check
-				return handler(ctx, req)
-			}
-			return authFn(ctx, req, info, handler)
-		}
-		opts = append(opts, grpc.ChainUnaryInterceptor(healthSkip))
-
+		opt = grpc.ChainUnaryInterceptor(ai.Unary("/grpc.health.v1.Health/Check"), sender.Unary(s.usage))
 		s.reqIntercepter = ai
-		s.enableAuth = true
+	} else {
+		fakeAuth := func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
+			return handler(fakeAuthInto(ctx), req)
+		}
+		opt = grpc.ChainUnaryInterceptor(fakeAuth, sender.Unary(s.usage))
 	}
 
-	grpcServer := grpc.NewServer(opts...)
+	grpcServer := grpc.NewServer(opt)
 	v1.RegisterFilesServiceServer(grpcServer, s)
 	reflection.Register(grpcServer)
 
@@ -139,23 +134,17 @@ func (s *S) Stop() {
 	s.srv.Stop()
 }
 
-func (s *S) extractUserInfoFromContext(ctx context.Context) (*auth.UserInfo, error) {
-	if !s.enableAuth {
-		return &auth.UserInfo{
-			OrganizationID: "default",
-			ProjectID:      defaultProjectID,
-			AssignedKubernetesEnvs: []auth.AssignedKubernetesEnv{
-				{
-					ClusterID: defaultClusterID,
-					Namespace: "default",
-				},
+// fakeAuthInto sets dummy user info and token into the context.
+func fakeAuthInto(ctx context.Context) context.Context {
+	return auth.AppendUserInfoToContext(ctx, auth.UserInfo{
+		OrganizationID: "default",
+		ProjectID:      defaultProjectID,
+		AssignedKubernetesEnvs: []auth.AssignedKubernetesEnv{
+			{
+				ClusterID: defaultClusterID,
+				Namespace: "default",
 			},
-			TenantID: defaultTenantID,
-		}, nil
-	}
-	userInfo, ok := auth.ExtractUserInfoFromContext(ctx)
-	if !ok {
-		return nil, status.Error(codes.Unauthenticated, "user info not found")
-	}
-	return userInfo, nil
+		},
+		TenantID: defaultTenantID,
+	})
 }

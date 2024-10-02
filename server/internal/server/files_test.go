@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/go-logr/logr/testr"
+	"github.com/llmariner/api-usage/pkg/sender"
 	v1 "github.com/llmariner/file-manager/api/v1"
 	"github.com/llmariner/file-manager/server/internal/store"
 	"github.com/stretchr/testify/assert"
@@ -21,8 +22,8 @@ func TestFiles(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st, &NoopS3Client{}, "pathPrefix", testr.New(t))
-	ctx := context.Background()
+	srv := New(st, &NoopS3Client{}, &sender.NoopUsageSetter{}, "pathPrefix", testr.New(t))
+	ctx := fakeAuthInto(context.Background())
 
 	const (
 		fileID = "f0"
@@ -71,7 +72,7 @@ func TestCreateFile(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st, &NoopS3Client{}, "pathPrefix", testr.New(t))
+	srv := New(st, &NoopS3Client{}, &sender.NoopUsageSetter{}, "pathPrefix", testr.New(t))
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		srv.CreateFile(w, r, nil)
@@ -108,7 +109,7 @@ func TestCreateFile(t *testing.T) {
 	assert.Equal(t, "test-file.jsonl", fj.Filename)
 	assert.Equal(t, int64(5), fj.Bytes)
 
-	resp, err := srv.GetFile(context.Background(), &v1.GetFileRequest{
+	resp, err := srv.GetFile(fakeAuthInto(context.Background()), &v1.GetFileRequest{
 		Id: fj.ID,
 	})
 	assert.NoError(t, err)
@@ -137,7 +138,7 @@ func TestGetFilePath(t *testing.T) {
 	assert.NoError(t, err)
 
 	wsrv := NewWorkerServiceServer(st, testr.New(t))
-	got, err := wsrv.GetFilePath(context.Background(), &v1.GetFilePathRequest{
+	got, err := wsrv.GetFilePath(fakeAuthInto(context.Background()), &v1.GetFilePathRequest{
 		Id: fileID,
 	})
 	assert.NoError(t, err)
