@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/go-logr/logr/testr"
 	v1 "github.com/llmariner/file-manager/api/v1"
 	"github.com/llmariner/file-manager/server/internal/store"
 	"github.com/stretchr/testify/assert"
@@ -20,7 +21,7 @@ func TestFiles(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st, &NoopS3Client{}, "pathPrefix")
+	srv := New(st, &NoopS3Client{}, "pathPrefix", testr.New(t))
 	ctx := context.Background()
 
 	const (
@@ -70,7 +71,7 @@ func TestCreateFile(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st, &NoopS3Client{}, "pathPrefix")
+	srv := New(st, &NoopS3Client{}, "pathPrefix", testr.New(t))
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		srv.CreateFile(w, r, nil)
@@ -135,7 +136,7 @@ func TestGetFilePath(t *testing.T) {
 	})
 	assert.NoError(t, err)
 
-	wsrv := NewWorkerServiceServer(st)
+	wsrv := NewWorkerServiceServer(st, testr.New(t))
 	got, err := wsrv.GetFilePath(context.Background(), &v1.GetFilePathRequest{
 		Id: fileID,
 	})

@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"net"
 	"net/http"
 
+	"github.com/go-logr/logr"
 	v1 "github.com/llmariner/file-manager/api/v1"
 	"github.com/llmariner/file-manager/server/internal/config"
 	"github.com/llmariner/file-manager/server/internal/store"
@@ -61,10 +61,11 @@ func (n noopReqIntercepter) InterceptHTTPRequest(req *http.Request) (int, auth.U
 }
 
 // New creates a server.
-func New(store *store.S, s3Client S3Client, pathPrefix string) *S {
+func New(store *store.S, s3Client S3Client, pathPrefix string, log logr.Logger) *S {
 	return &S{
 		store:          store,
 		s3Client:       s3Client,
+		log:            log.WithName("grpc"),
 		pathPrefix:     pathPrefix,
 		reqIntercepter: noopReqIntercepter{},
 	}
@@ -78,6 +79,7 @@ type S struct {
 
 	store    *store.S
 	s3Client S3Client
+	log      logr.Logger
 
 	pathPrefix string
 
@@ -87,7 +89,7 @@ type S struct {
 
 // Run starts the gRPC server.
 func (s *S) Run(ctx context.Context, port int, authConfig config.AuthConfig) error {
-	log.Printf("Starting server on port %d\n", port)
+	s.log.Info("Starting gRPC server...", "port", port)
 
 	var opts []grpc.ServerOption
 	if authConfig.Enable {
