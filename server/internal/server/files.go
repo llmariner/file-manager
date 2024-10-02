@@ -5,12 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 
+	"github.com/llmariner/common/pkg/id"
 	v1 "github.com/llmariner/file-manager/api/v1"
 	"github.com/llmariner/file-manager/server/internal/store"
-	"github.com/llmariner/common/pkg/id"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
@@ -62,7 +61,7 @@ func (s *S) CreateFile(
 		_ = file.Close()
 	}()
 
-	log.Printf("Uploading the file to S3\n")
+	s.log.Info("Uploading the file to S3")
 	fileID, err := id.GenerateID("file-", 24)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("generate file id: %s", err.Error()), http.StatusInternalServerError)
@@ -74,7 +73,7 @@ func (s *S) CreateFile(
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	log.Printf("Uploaded the file (%d bytes)\n", header.Size)
+	s.log.Info("Uploaded the file", "header(bytes)", header.Size)
 
 	f, err := s.store.CreateFile(store.FileSpec{
 		FileID:         fileID,
