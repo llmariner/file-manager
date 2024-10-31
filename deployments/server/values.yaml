@@ -15,6 +15,7 @@ global:
     # The database host name.
     host: postgres
     # The database port number.
+    # +docs:type=number
     port: 5432
     # The database user name.
     username: ps_user
@@ -138,12 +139,16 @@ objectStore:
     pathPrefix: files
 
 # The HTTP port number for the public service.
+# +docs:type=number
 httpPort: 8080
 # The GRPC port number for the public service.
+# +docs:type=number
 grpcPort: 8081
 # The GRPC port number for the worker service.
+# +docs:type=number
 workerServiceGrpcPort: 8082
 # The GRPC port number for the internal service.
+# +docs:type=number
 internalGrpcPort: 8083
 
 serviceAccount:
@@ -166,6 +171,7 @@ serviceAccount:
 # nameOverride: "my-file-manager-server"
 
 # The number of replicas for the file-manager-server Deployment.
+# +docs:type=number
 replicaCount: 1
 
 # The container image of file-manager-server.
@@ -239,11 +245,26 @@ resources:
 # LivenessProbe settings for the file-manager-server pod.
 # For more information, see [Liveness, Readiness, and Startup Probes](https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/)
 livenessProbe:
+  # Specify whether to enable the liveness probe.
   enabled: true
+  # Number of seconds after the container has started before startup,
+  # liveness or readiness probes are initiated.
+  # +docs:type=number
   initialDelaySeconds: 3
+  # How often (in seconds) to perform the probe. Default to 10 seconds. 
+  # +docs:type=number
   periodSeconds: 10
+  # Number of seconds after which the probe times out. 
+  # +docs:type=number
   timeoutSeconds: 3
+  # Minimum consecutive successes for the probe to be considered successful
+  # after having failed.
+  # +docs:type=number
   successThreshold: 1
+  # After a probe fails `failureThreshold` times in a row, Kubernetes
+  # considers that the overall check has failed: the container is not
+  # ready/healthy/live. 
+  # +docs:type=number
   failureThreshold: 5
 
 # Security Context for the file-manager-server pod.
@@ -264,9 +285,11 @@ securityContext:
   runAsUser: 1000
 
 # Additional volumes to add to the file-manager-server pod.
+# For more information, see [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/).
 # +docs:property
 # volumes: []
 
 # Additional volume mounts to add to the file-manager-server container.
+# For more information, see [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/).
 # +docs:property
 # volumeMounts: []
