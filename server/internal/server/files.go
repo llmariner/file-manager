@@ -37,7 +37,7 @@ func (s *S) CreateFile(
 	}
 
 	usage := auv1.UsageRecord{
-		User:         userInfo.InternalUserID,
+		UserId:       userInfo.InternalUserID,
 		Tenant:       userInfo.TenantID,
 		Organization: userInfo.OrganizationID,
 		Project:      userInfo.ProjectID,

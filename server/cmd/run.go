@@ -97,9 +97,16 @@ func run(ctx context.Context, c *config.Config) error {
 		return err
 	}
 
-	usage, err := sender.New(ctx, c.UsageSender, grpc.WithTransportCredentials(insecure.NewCredentials()), logger)
-	if err != nil {
-		return err
+	var usageSetter sender.UsageSetter
+	if c.UsageSender.Enable {
+		usage, err := sender.New(ctx, c.UsageSender, grpc.WithTransportCredentials(insecure.NewCredentials()), logger)
+		if err != nil {
+			return err
+		}
+		go func() { usage.Run(ctx) }()
+		usageSetter = usage
+	} else {
+		usageSetter = sender.NoopUsageSetter{}
 	}
 
 	var s3Client server.S3Client
@@ -114,7 +121,7 @@ func run(ctx context.Context, c *config.Config) error {
 		}
 		pathPrefix = s3conf.PathPrefix
 	}
-	s := server.New(st, s3Client, usage, pathPrefix, logger)
+	s := server.New(st, s3Client, usageSetter, pathPrefix, logger)
 	createFile := runtime.MustPattern(runtime.NewPattern(
 		1,
 		[]int{2, 0, 2, 1},
@@ -129,8 +136,6 @@ func run(ctx context.Context, c *config.Config) error {
 		"",
 	))
 	mux.Handle("Get", getFileContent, s.GetFileContent)
-
-	go func() { usage.Run(ctx) }()
 
 	errCh := make(chan error)
 	go func() {
