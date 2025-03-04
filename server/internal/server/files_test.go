@@ -145,3 +145,42 @@ func TestGetFilePath(t *testing.T) {
 	assert.Equal(t, "path0", got.Path)
 	assert.Equal(t, "filename0", got.Filename)
 }
+
+func TestCreateFileFromObjectPath(t *testing.T) {
+	st, tearDown := store.NewTest(t)
+	defer tearDown()
+
+	srv := New(st, &NoopS3Client{}, &sender.NoopUsageSetter{}, "pathPrefix", testr.New(t))
+	ctx := fakeAuthInto(context.Background())
+
+	// Test successful creation
+	resp, err := srv.CreateFileFromObjectPath(ctx, &v1.CreateFileFromObjectPathRequest{
+		ObjectPath: "path/to/test-file.jsonl",
+		Purpose:    purposeFineTune,
+	})
+	assert.NoError(t, err)
+	assert.True(t, resp.Id != "")
+	assert.Equal(t, "test-file.jsonl", resp.Filename)
+	assert.Equal(t, int64(0), resp.Bytes)
+	assert.Equal(t, purposeFineTune, resp.Purpose)
+
+	// Verify the file exists in the store
+	f, err := st.GetFile(resp.Id, defaultProjectID)
+	assert.NoError(t, err)
+	assert.Equal(t, "path/to/test-file.jsonl", f.ObjectStorePath)
+
+	// Test missing object path
+	_, err = srv.CreateFileFromObjectPath(ctx, &v1.CreateFileFromObjectPathRequest{
+		Purpose: purposeFineTune,
+	})
+	assert.Error(t, err)
+	assert.Equal(t, codes.InvalidArgument, status.Code(err))
+
+	// Test invalid purpose
+	_, err = srv.CreateFileFromObjectPath(ctx, &v1.CreateFileFromObjectPathRequest{
+		ObjectPath: "path/to/file",
+		Purpose:    "invalid-purpose",
+	})
+	assert.Error(t, err)
+	assert.Equal(t, codes.InvalidArgument, status.Code(err))
+}

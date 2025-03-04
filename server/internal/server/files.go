@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"time"
 
 	auv1 "github.com/llmariner/api-usage/api/v1"
@@ -215,6 +216,52 @@ func (s *S) DeleteFile(
 		Object:  "file",
 		Deleted: true,
 	}, nil
+}
+
+// CreateFileFromObjectPath creates a file from the object path in the object storage without
+// actually uploading the file.
+func (s *S) CreateFileFromObjectPath(
+	ctx context.Context,
+	req *v1.CreateFileFromObjectPathRequest,
+) (*v1.File, error) {
+	userInfo, ok := auth.ExtractUserInfoFromContext(ctx)
+	if !ok {
+		return nil, status.Errorf(codes.Unauthenticated, "failed to extract user info from context")
+	}
+
+	if req.ObjectPath == "" {
+		return nil, status.Error(codes.InvalidArgument, "object_path is required")
+	}
+
+	if err := validatePurpose(req.Purpose); err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	fileID, err := id.GenerateID("file-", 24)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "generate file id: %s", err)
+	}
+
+	// Get the basename from the object path.
+	filename := filepath.Base(req.ObjectPath)
+
+	f, err := s.store.CreateFile(store.FileSpec{
+		FileID:         fileID,
+		TenantID:       userInfo.TenantID,
+		OrganizationID: userInfo.OrganizationID,
+		ProjectID:      userInfo.ProjectID,
+
+		Purpose:  req.Purpose,
+		Filename: filename,
+		Bytes:    0, // Set to 0 as we don't know the size.
+
+		ObjectStorePath: req.ObjectPath,
+	})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "create file: %s", err)
+	}
+
+	return toFileProto(f), nil
 }
 
 // GetFilePath gets a file path.
