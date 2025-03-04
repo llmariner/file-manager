@@ -60,14 +60,15 @@ func (n noopReqIntercepter) InterceptHTTPRequest(req *http.Request) (int, auth.U
 }
 
 // New creates a server.
-func New(store *store.S, s3Client S3Client, sender sender.UsageSetter, pathPrefix string, log logr.Logger) *S {
+func New(store *store.S, s3Client S3Client, sender sender.UsageSetter, pathPrefix string, enableFileUpload bool, log logr.Logger) *S {
 	return &S{
-		store:          store,
-		s3Client:       s3Client,
-		usage:          sender,
-		log:            log.WithName("grpc"),
-		pathPrefix:     pathPrefix,
-		reqIntercepter: noopReqIntercepter{},
+		store:            store,
+		s3Client:         s3Client,
+		usage:            sender,
+		log:              log.WithName("grpc"),
+		pathPrefix:       pathPrefix,
+		enableFileUpload: enableFileUpload,
+		reqIntercepter:   noopReqIntercepter{},
 	}
 }
 
@@ -77,10 +78,11 @@ type S struct {
 
 	srv *grpc.Server
 
-	store    *store.S
-	s3Client S3Client
-	usage    sender.UsageSetter
-	log      logr.Logger
+	store            *store.S
+	s3Client         S3Client
+	usage            sender.UsageSetter
+	enableFileUpload bool
+	log              logr.Logger
 
 	pathPrefix string
 

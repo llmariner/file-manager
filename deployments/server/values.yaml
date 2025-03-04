@@ -139,6 +139,9 @@ database:
   # The database name for storing the file-manager-server data.
   database: file_manager
 
+# Enable or disable file upload functionality
+enableFileUpload: true
+
 objectStore:
   s3:
     # The prefix name to append to the file path.

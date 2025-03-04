@@ -22,7 +22,7 @@ func TestFiles(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st, &NoopS3Client{}, &sender.NoopUsageSetter{}, "pathPrefix", testr.New(t))
+	srv := New(st, &NoopS3Client{}, &sender.NoopUsageSetter{}, "pathPrefix", true, testr.New(t))
 	ctx := fakeAuthInto(context.Background())
 
 	const (
@@ -72,7 +72,7 @@ func TestCreateFile(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st, &NoopS3Client{}, &sender.NoopUsageSetter{}, "pathPrefix", testr.New(t))
+	srv := New(st, &NoopS3Client{}, &sender.NoopUsageSetter{}, "pathPrefix", true, testr.New(t))
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		srv.CreateFile(w, r, nil)
@@ -114,6 +114,72 @@ func TestCreateFile(t *testing.T) {
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, fj.ID, resp.Id)
+}
+
+func TestCreateFileWithUploadFlag(t *testing.T) {
+	tcs := []struct {
+		name             string
+		enableFileUpload bool
+		wantErr          bool
+	}{
+		{
+			name:             "file upload enabled",
+			enableFileUpload: true,
+		},
+		{
+			name:             "file upload disabled",
+			enableFileUpload: false,
+		},
+	}
+
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			st, tearDown := store.NewTest(t)
+			defer tearDown()
+
+			srv := New(st, &NoopS3Client{}, &sender.NoopUsageSetter{}, "pathPrefix", tc.enableFileUpload, testr.New(t))
+			rr := httptest.NewRecorder()
+			handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				srv.CreateFile(w, r, nil)
+			})
+
+			var b bytes.Buffer
+			w := multipart.NewWriter(&b)
+
+			fw, err := w.CreateFormFile("file", "test-file.jsonl")
+			assert.NoError(t, err)
+			_, err = fw.Write([]byte("hello"))
+			assert.NoError(t, err)
+
+			fw, err = w.CreateFormField("purpose")
+			assert.NoError(t, err)
+			_, err = fw.Write([]byte(purposeFineTune))
+			assert.NoError(t, err)
+
+			err = w.Close()
+			assert.NoError(t, err)
+
+			req, err := http.NewRequest("POST", "v1/files", &b)
+			assert.NoError(t, err)
+			req.Header.Set("Content-Type", w.FormDataContentType())
+
+			handler.ServeHTTP(rr, req)
+
+			if tc.wantErr {
+				assert.Equal(t, http.StatusForbidden, rr.Code)
+				return
+			}
+			assert.Equal(t, http.StatusCreated, rr.Code)
+
+			var fj fileJSON
+			err = json.Unmarshal(rr.Body.Bytes(), &fj)
+			assert.NoError(t, err)
+			assert.NotEmpty(t, fj.ID)
+			assert.Equal(t, purposeFineTune, fj.Purpose)
+			assert.Equal(t, "test-file.jsonl", fj.Filename)
+			assert.Equal(t, int64(5), fj.Bytes)
+		})
+	}
 }
 
 func TestGetFilePath(t *testing.T) {
