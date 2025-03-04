@@ -25,6 +25,10 @@ export type DeleteFileResponse = {
     object?: string;
     deleted?: boolean;
 };
+export type CreateFileFromObjectPathRequest = {
+    objectPath?: string;
+    purpose?: string;
+};
 export type GetFilePathRequest = {
     id?: string;
 };
@@ -36,6 +40,7 @@ export declare class FilesService {
     static ListFiles(req: ListFilesRequest, initReq?: fm.InitReq): Promise<ListFilesResponse>;
     static GetFile(req: GetFileRequest, initReq?: fm.InitReq): Promise<File>;
     static DeleteFile(req: DeleteFileRequest, initReq?: fm.InitReq): Promise<DeleteFileResponse>;
+    static CreateFileFromObjectPath(req: CreateFileFromObjectPathRequest, initReq?: fm.InitReq): Promise<File>;
 }
 export declare class FilesWorkerService {
     static GetFilePath(req: GetFilePathRequest, initReq?: fm.InitReq): Promise<GetFilePathResponse>;

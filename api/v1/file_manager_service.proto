@@ -44,6 +44,12 @@ message DeleteFileResponse {
   bool deleted = 3;
 }
 
+message CreateFileFromObjectPathRequest {
+  // The object path is the path to the object in the object storage.
+  string object_path = 1;
+  string purpose = 2;
+}
+
 service FilesService {
   // File upload and download are implemented without gRPC gateway.
 
@@ -64,6 +70,16 @@ service FilesService {
       delete: "/v1/files/{id}"
     };
   }
+
+  // CreateFileFromObjectPath creates a file from the object path in the object storage without
+  // actually uploading the file. This is mainly added to allow the worker cluster to access
+  // files without giving the access privilege to the object storage to the control plane.
+  rpc CreateFileFromObjectPath(CreateFileFromObjectPathRequest) returns (File) {
+    option (google.api.http) = {
+      post: "/v1/files:createFromObjectPath"
+    };
+  }
+
 }
 
 message GetFilePathRequest {

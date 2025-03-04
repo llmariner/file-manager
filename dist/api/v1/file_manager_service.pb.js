@@ -14,6 +14,9 @@ export class FilesService {
     static DeleteFile(req, initReq) {
         return fm.fetchReq(`/v1/files/${req["id"]}`, Object.assign(Object.assign({}, initReq), { method: "DELETE" }));
     }
+    static CreateFileFromObjectPath(req, initReq) {
+        return fm.fetchReq(`/v1/files:createFromObjectPath`, Object.assign(Object.assign({}, initReq), { method: "POST" }));
+    }
 }
 export class FilesWorkerService {
     static GetFilePath(req, initReq) {

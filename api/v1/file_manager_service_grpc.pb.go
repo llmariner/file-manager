@@ -21,6 +21,10 @@ type FilesServiceClient interface {
 	ListFiles(ctx context.Context, in *ListFilesRequest, opts ...grpc.CallOption) (*ListFilesResponse, error)
 	GetFile(ctx context.Context, in *GetFileRequest, opts ...grpc.CallOption) (*File, error)
 	DeleteFile(ctx context.Context, in *DeleteFileRequest, opts ...grpc.CallOption) (*DeleteFileResponse, error)
+	// CreateFileFromObjectPath creates a file from the object path in the object storage without
+	// actually uploading the file. This is mainly added to allow the worker cluster to access
+	// files without giving the access privilege to the object storage to the control plane.
+	CreateFileFromObjectPath(ctx context.Context, in *CreateFileFromObjectPathRequest, opts ...grpc.CallOption) (*File, error)
 }
 
 type filesServiceClient struct {
@@ -58,6 +62,15 @@ func (c *filesServiceClient) DeleteFile(ctx context.Context, in *DeleteFileReque
 	return out, nil
 }
 
+func (c *filesServiceClient) CreateFileFromObjectPath(ctx context.Context, in *CreateFileFromObjectPathRequest, opts ...grpc.CallOption) (*File, error) {
+	out := new(File)
+	err := c.cc.Invoke(ctx, "/llmariner.files.server.v1.FilesService/CreateFileFromObjectPath", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FilesServiceServer is the server API for FilesService service.
 // All implementations must embed UnimplementedFilesServiceServer
 // for forward compatibility
@@ -65,6 +78,10 @@ type FilesServiceServer interface {
 	ListFiles(context.Context, *ListFilesRequest) (*ListFilesResponse, error)
 	GetFile(context.Context, *GetFileRequest) (*File, error)
 	DeleteFile(context.Context, *DeleteFileRequest) (*DeleteFileResponse, error)
+	// CreateFileFromObjectPath creates a file from the object path in the object storage without
+	// actually uploading the file. This is mainly added to allow the worker cluster to access
+	// files without giving the access privilege to the object storage to the control plane.
+	CreateFileFromObjectPath(context.Context, *CreateFileFromObjectPathRequest) (*File, error)
 	mustEmbedUnimplementedFilesServiceServer()
 }
 
@@ -80,6 +97,9 @@ func (UnimplementedFilesServiceServer) GetFile(context.Context, *GetFileRequest)
 }
 func (UnimplementedFilesServiceServer) DeleteFile(context.Context, *DeleteFileRequest) (*DeleteFileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteFile not implemented")
+}
+func (UnimplementedFilesServiceServer) CreateFileFromObjectPath(context.Context, *CreateFileFromObjectPathRequest) (*File, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateFileFromObjectPath not implemented")
 }
 func (UnimplementedFilesServiceServer) mustEmbedUnimplementedFilesServiceServer() {}
 
@@ -148,6 +168,24 @@ func _FilesService_DeleteFile_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FilesService_CreateFileFromObjectPath_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateFileFromObjectPathRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FilesServiceServer).CreateFileFromObjectPath(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/llmariner.files.server.v1.FilesService/CreateFileFromObjectPath",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FilesServiceServer).CreateFileFromObjectPath(ctx, req.(*CreateFileFromObjectPathRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FilesService_ServiceDesc is the grpc.ServiceDesc for FilesService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -166,6 +204,10 @@ var FilesService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteFile",
 			Handler:    _FilesService_DeleteFile_Handler,
+		},
+		{
+			MethodName: "CreateFileFromObjectPath",
+			Handler:    _FilesService_CreateFileFromObjectPath_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

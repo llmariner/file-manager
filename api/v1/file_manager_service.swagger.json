@@ -109,6 +109,29 @@
           "FilesService"
         ]
       }
+    },
+    "/v1/files:createFromObjectPath": {
+      "post": {
+        "summary": "CreateFileFromObjectPath creates a file from the object path in the object storage without\nactually uploading the file. This is mainly added to allow the worker cluster to access\nfiles without giving the access privilege to the object storage to the control plane.",
+        "operationId": "FilesService_CreateFileFromObjectPath",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1File"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "FilesService"
+        ]
+      }
     }
   },
   "definitions": {
