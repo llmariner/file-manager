@@ -323,7 +323,7 @@ func validatePurpose(p string) error {
 	case purposeFineTune, purposeAssistants:
 		return nil
 	default:
-		return status.Errorf(codes.InvalidArgument, "invalid purpose")
+		return status.Errorf(codes.InvalidArgument, "invalid purpose: %q. must be either %q or %q", p, purposeFineTune, purposeAssistants)
 	}
 }
 
