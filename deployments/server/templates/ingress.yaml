@@ -26,6 +26,13 @@ spec:
             name: {{ include "file-manager-server.fullname" . }}-http
             port:
               number: {{ .Values.httpPort }}
+      - path: /v1/files:createFromObjectPath
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "file-manager-server.fullname" . }}-http
+            port:
+              number: {{ .Values.httpPort }}
 
 ---
 
