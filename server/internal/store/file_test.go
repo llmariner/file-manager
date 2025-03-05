@@ -2,6 +2,7 @@ package store
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -71,4 +72,112 @@ func TestFile(t *testing.T) {
 
 	err = st.DeleteFile(fileID, projectID)
 	assert.True(t, errors.Is(err, gorm.ErrRecordNotFound))
+}
+
+func TestFilePagination(t *testing.T) {
+	const (
+		projectID = "pid0"
+		purpose   = "purpose0"
+	)
+
+	tcs := []struct {
+		name           string
+		purpose        string
+		cursor         uint
+		limit          int
+		order          string
+		wantFiles      []string
+		wantHasMore    bool
+		wantTotalCount int64
+	}{
+		{
+			name:           "descending order first page",
+			cursor:         0,
+			limit:          3,
+			order:          "desc",
+			wantFiles:      []string{"f4", "f3", "f2"},
+			wantHasMore:    true,
+			wantTotalCount: 5,
+		},
+		{
+			name:           "ascending order first page",
+			cursor:         0,
+			limit:          3,
+			order:          "asc",
+			wantFiles:      []string{"f0", "f1", "f2"},
+			wantHasMore:    true,
+			wantTotalCount: 5,
+		},
+		{
+			name:           "descending order with cursor",
+			cursor:         2,
+			limit:          3,
+			order:          "desc",
+			wantFiles:      []string{"f0"},
+			wantHasMore:    false,
+			wantTotalCount: 5,
+		},
+		{
+			name:           "ascending order with cursor",
+			cursor:         2,
+			limit:          3,
+			order:          "asc",
+			wantFiles:      []string{"f2", "f3", "f4"},
+			wantHasMore:    false,
+			wantTotalCount: 5,
+		},
+		{
+			name:           "with purpose filter",
+			purpose:        purpose,
+			cursor:         0,
+			limit:          3,
+			order:          "desc",
+			wantFiles:      []string{"f4", "f3", "f2"},
+			wantHasMore:    true,
+			wantTotalCount: 5,
+		},
+	}
+
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			st, tearDown := NewTest(t)
+			defer tearDown()
+
+			for i := 0; i < 5; i++ {
+				_, err := st.CreateFile(FileSpec{
+					FileID:         fmt.Sprintf("f%d", i),
+					TenantID:       fmt.Sprintf("tid%d", i),
+					OrganizationID: fmt.Sprintf("oid%d", i),
+					ProjectID:      projectID,
+					Filename:       fmt.Sprintf("filename%d", i),
+					Purpose:        purpose,
+				})
+				assert.NoError(t, err)
+			}
+
+			var (
+				files   []*File
+				hasMore bool
+				err     error
+			)
+
+			if tc.purpose != "" {
+				files, hasMore, err = st.ListFilesByProjectIDAndPurposeWithPagination(projectID, tc.purpose, tc.cursor, tc.limit, tc.order)
+			} else {
+				files, hasMore, err = st.ListFilesByProjectIDWithPagination(projectID, tc.cursor, tc.limit, tc.order)
+			}
+
+			assert.NoError(t, err)
+			assert.Equal(t, tc.wantHasMore, hasMore)
+			assert.Len(t, files, len(tc.wantFiles))
+
+			for i, wantFileID := range tc.wantFiles {
+				assert.Equal(t, wantFileID, files[i].FileID)
+			}
+
+			count, err := st.CountFilesByProjectID(projectID)
+			assert.NoError(t, err)
+			assert.Equal(t, tc.wantTotalCount, count)
+		})
+	}
 }
