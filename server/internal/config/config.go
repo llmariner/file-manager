@@ -81,10 +81,11 @@ func (c *AuthConfig) Validate() error {
 
 // Config is the configuration.
 type Config struct {
-	GRPCPort              int `yaml:"grpcPort"`
-	HTTPPort              int `yaml:"httpPort"`
-	WorkerServiceGRPCPort int `yaml:"workerServiceGrpcPort"`
-	InternalGRPCPort      int `yaml:"internalGrpcPort"`
+	GRPCPort              int  `yaml:"grpcPort"`
+	HTTPPort              int  `yaml:"httpPort"`
+	WorkerServiceGRPCPort int  `yaml:"workerServiceGrpcPort"`
+	InternalGRPCPort      int  `yaml:"internalGrpcPort"`
+	EnableFileUpload      bool `yaml:"enableFileUpload"`
 
 	Database    db.Config         `yaml:"database"`
 	ObjectStore ObjectStoreConfig `yaml:"objectStore"`

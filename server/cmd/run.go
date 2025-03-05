@@ -121,7 +121,7 @@ func run(ctx context.Context, c *config.Config) error {
 		}
 		pathPrefix = s3conf.PathPrefix
 	}
-	s := server.New(st, s3Client, usageSetter, pathPrefix, logger)
+	s := server.New(st, s3Client, usageSetter, pathPrefix, c.EnableFileUpload, logger)
 	createFile := runtime.MustPattern(runtime.NewPattern(
 		1,
 		[]int{2, 0, 2, 1},

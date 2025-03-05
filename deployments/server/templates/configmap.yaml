@@ -10,6 +10,7 @@ data:
     grpcPort: {{ .Values.grpcPort }}
     workerServiceGrpcPort: {{ .Values.workerServiceGrpcPort }}
     internalGrpcPort: {{ .Values.internalGrpcPort }}
+    enableFileUpload: {{ .Values.enableFileUpload }}
     objectStore:
       s3:
         endpointUrl: {{ .Values.global.objectStore.s3.endpointUrl }}
