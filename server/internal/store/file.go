@@ -83,6 +83,15 @@ func (s *S) GetFileByFileID(fileID string) (*File, error) {
 	return &f, nil
 }
 
+// GetFileByFileIDAndProjectID returns a file by file ID and project ID.
+func (s *S) GetFileByFileIDAndProjectID(fileID, projectID string) (*File, error) {
+	var f File
+	if err := s.db.Where("file_id = ? AND project_id = ?", fileID, projectID).Take(&f).Error; err != nil {
+		return nil, err
+	}
+	return &f, nil
+}
+
 // ListFilesByProjectID lists files.
 func (s *S) ListFilesByProjectID(projectID string) ([]*File, error) {
 	var fs []*File
@@ -99,6 +108,73 @@ func (s *S) ListFilesByProjectIDAndPurpose(projectID, purpose string) ([]*File, 
 		return nil, err
 	}
 	return fs, nil
+}
+
+// ListFilesByProjectIDWithPagination lists files with pagination.
+func (s *S) ListFilesByProjectIDWithPagination(projectID string, afterID uint, limit int, order string) ([]*File, bool, error) {
+	var fs []*File
+	query := s.db.Where("project_id = ?", projectID)
+	if afterID > 0 {
+		if order == "asc" {
+			query = query.Where("id > ?", afterID)
+		} else {
+			query = query.Where("id < ?", afterID)
+		}
+	}
+
+	if order == "asc" {
+		query = query.Order("id ASC")
+	} else {
+		query = query.Order("id DESC")
+	}
+	query = query.Limit(limit + 1)
+	if err := query.Find(&fs).Error; err != nil {
+		return nil, false, err
+	}
+
+	hasMore := len(fs) > limit
+	if hasMore {
+		fs = fs[:limit]
+	}
+	return fs, hasMore, nil
+}
+
+// ListFilesByProjectIDAndPurposeWithPagination lists files with pagination.
+func (s *S) ListFilesByProjectIDAndPurposeWithPagination(projectID, purpose string, afterID uint, limit int, order string) ([]*File, bool, error) {
+	var fs []*File
+	query := s.db.Where("project_id = ? AND purpose = ?", projectID, purpose)
+	if afterID > 0 {
+		if order == "asc" {
+			query = query.Where("id > ?", afterID)
+		} else {
+			query = query.Where("id < ?", afterID)
+		}
+	}
+
+	if order == "asc" {
+		query = query.Order("id ASC")
+	} else {
+		query = query.Order("id DESC")
+	}
+	query = query.Limit(limit + 1)
+	if err := query.Find(&fs).Error; err != nil {
+		return nil, false, err
+	}
+
+	hasMore := len(fs) > limit
+	if hasMore {
+		fs = fs[:limit]
+	}
+	return fs, hasMore, nil
+}
+
+// CountFilesByProjectID counts files by project ID.
+func (s *S) CountFilesByProjectID(projectID string) (int64, error) {
+	var count int64
+	if err := s.db.Model(&File{}).Where("project_id = ?", projectID).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return count, nil
 }
 
 // DeleteFile deletes a file by file ID and project ID.

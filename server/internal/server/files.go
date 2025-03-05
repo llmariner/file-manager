@@ -22,6 +22,8 @@ import (
 const (
 	purposeFineTune   = "fine-tune"
 	purposeAssistants = "assistants"
+	defaultPageSize   = 20
+	maxPageSize       = 100
 )
 
 // CreateFile creates a file.
@@ -143,15 +145,48 @@ func (s *S) ListFiles(
 		return nil, status.Errorf(codes.Unauthenticated, "failed to extract user info from context")
 	}
 
+	if req.Limit < 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "limit must be non-negative")
+	}
+	limit := req.Limit
+	if limit == 0 {
+		limit = defaultPageSize
+	}
+	if limit > maxPageSize {
+		limit = maxPageSize
+	}
+
+	// Validate order parameter
+	order := "desc"
+	if req.Order != "" {
+		if req.Order != "asc" && req.Order != "desc" {
+			return nil, status.Errorf(codes.InvalidArgument, "order must be either 'asc' or 'desc'")
+		}
+		order = req.Order
+	}
+
+	var afterID uint
+	if req.After != "" {
+		file, err := s.store.GetFileByFileIDAndProjectID(req.After, userInfo.ProjectID)
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return nil, status.Errorf(codes.InvalidArgument, "invalid after: %s", err)
+			}
+			return nil, status.Errorf(codes.Internal, "get file: %s", err)
+		}
+		afterID = file.ID
+	}
+
 	var fs []*store.File
+	var hasMore bool
 	var err error
 	if p := req.Purpose; p != "" {
 		if err := validatePurpose(p); err != nil {
 			return nil, err
 		}
-		fs, err = s.store.ListFilesByProjectIDAndPurpose(userInfo.ProjectID, p)
+		fs, hasMore, err = s.store.ListFilesByProjectIDAndPurposeWithPagination(userInfo.ProjectID, p, afterID, int(limit), order)
 	} else {
-		fs, err = s.store.ListFilesByProjectID(userInfo.ProjectID)
+		fs, hasMore, err = s.store.ListFilesByProjectIDWithPagination(userInfo.ProjectID, afterID, int(limit), order)
 	}
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "list files: %s", err)
@@ -161,9 +196,17 @@ func (s *S) ListFiles(
 	for _, f := range fs {
 		fileProtos = append(fileProtos, toFileProto(f))
 	}
+
+	totalItems, err := s.store.CountFilesByProjectID(userInfo.ProjectID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "count files: %s", err)
+	}
+
 	return &v1.ListFilesResponse{
-		Object: "list",
-		Data:   fileProtos,
+		Object:     "list",
+		Data:       fileProtos,
+		HasMore:    hasMore,
+		TotalItems: int32(totalItems),
 	}, nil
 }
 
