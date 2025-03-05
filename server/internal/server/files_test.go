@@ -216,7 +216,7 @@ func TestCreateFileFromObjectPath(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st, &NoopS3Client{}, &sender.NoopUsageSetter{}, "pathPrefix", testr.New(t))
+	srv := New(st, &NoopS3Client{}, &sender.NoopUsageSetter{}, "pathPrefix", true, testr.New(t))
 	ctx := fakeAuthInto(context.Background())
 
 	// Test successful creation
