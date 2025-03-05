@@ -15,7 +15,7 @@ export class FilesService {
         return fm.fetchReq(`/v1/files/${req["id"]}`, Object.assign(Object.assign({}, initReq), { method: "DELETE" }));
     }
     static CreateFileFromObjectPath(req, initReq) {
-        return fm.fetchReq(`/v1/files:createFromObjectPath`, Object.assign(Object.assign({}, initReq), { method: "POST" }));
+        return fm.fetchReq(`/v1/files:createFromObjectPath`, Object.assign(Object.assign({}, initReq), { method: "POST", body: JSON.stringify(req) }));
     }
 }
 export class FilesWorkerService {

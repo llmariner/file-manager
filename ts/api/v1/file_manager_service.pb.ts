@@ -62,7 +62,7 @@ export class FilesService {
     return fm.fetchReq<DeleteFileRequest, DeleteFileResponse>(`/v1/files/${req["id"]}`, {...initReq, method: "DELETE"})
   }
   static CreateFileFromObjectPath(req: CreateFileFromObjectPathRequest, initReq?: fm.InitReq): Promise<File> {
-    return fm.fetchReq<CreateFileFromObjectPathRequest, File>(`/v1/files:createFromObjectPath`, {...initReq, method: "POST"})
+    return fm.fetchReq<CreateFileFromObjectPathRequest, File>(`/v1/files:createFromObjectPath`, {...initReq, method: "POST", body: JSON.stringify(req)})
   }
 }
 export class FilesWorkerService {

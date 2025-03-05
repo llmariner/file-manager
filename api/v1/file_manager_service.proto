@@ -77,6 +77,7 @@ service FilesService {
   rpc CreateFileFromObjectPath(CreateFileFromObjectPathRequest) returns (File) {
     option (google.api.http) = {
       post: "/v1/files:createFromObjectPath"
+      body: "*"
     };
   }
 
