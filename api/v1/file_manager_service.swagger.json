@@ -42,6 +42,29 @@
         "parameters": [
           {
             "name": "purpose",
+            "description": "purpose is used to filter the files by their purpose. Optional.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "after",
+            "description": "after is the identifier for the last job from the previous pagination request.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "description": "limit is the number of fine-tuning jobs to retrieve. Defaults to 20.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "order",
+            "description": "order is set to either 'asc' or 'desc' to sort objects by their created_at timestamp.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -245,6 +268,14 @@
           "items": {
             "$ref": "#/definitions/v1File"
           }
+        },
+        "hasMore": {
+          "type": "boolean"
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32",
+          "description": "total_items is the total number of batch jobs. This is not defined in the\nOpenAI API spec, but we include here for better UX in the frontend."
         }
       }
     }
