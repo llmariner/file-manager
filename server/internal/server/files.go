@@ -242,18 +242,19 @@ func (s *S) CreateFileFromObjectPath(
 		return nil, status.Errorf(codes.Internal, "generate file id: %s", err)
 	}
 
-	// Get the basename from the object path.
-	filename := filepath.Base(req.ObjectPath)
-
 	f, err := s.store.CreateFile(store.FileSpec{
 		FileID:         fileID,
 		TenantID:       userInfo.TenantID,
 		OrganizationID: userInfo.OrganizationID,
 		ProjectID:      userInfo.ProjectID,
 
-		Purpose:  req.Purpose,
-		Filename: filename,
-		Bytes:    0, // Set to 0 as we don't know the size.
+		Purpose: req.Purpose,
+
+		// Use the basename as a filename.
+		Filename: filepath.Base(req.ObjectPath),
+
+		// Set to 0 as we don't know the size.
+		Bytes: 0,
 
 		ObjectStorePath: req.ObjectPath,
 	})
