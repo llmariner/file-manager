@@ -2,7 +2,7 @@ import * as fm from "../../fetch.pb";
 export type File = {
     id?: string;
     bytes?: string;
-    createdAt?: string;
+    created_at?: string;
     filename?: string;
     object?: string;
     purpose?: string;
@@ -26,7 +26,7 @@ export type DeleteFileResponse = {
     deleted?: boolean;
 };
 export type CreateFileFromObjectPathRequest = {
-    objectPath?: string;
+    object_path?: string;
     purpose?: string;
 };
 export type GetFilePathRequest = {
