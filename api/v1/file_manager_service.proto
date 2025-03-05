@@ -22,12 +22,26 @@ message File {
 }
 
 message ListFilesRequest {
+  // purpose is used to filter the files by their purpose. Optional.
   string purpose = 1;
+  // after is the identifier for the last job from the previous pagination request.
+  string after = 2;
+  // limit is the number of fine-tuning jobs to retrieve. Defaults to 20.
+  int32 limit = 3;
+  // order is set to either 'asc' or 'desc' to sort objects by their created_at timestamp.
+  string order = 4;
+
 }
 
 message ListFilesResponse {
   string object = 1;
   repeated File data = 2;
+
+  bool has_more = 3;
+
+  // total_items is the total number of batch jobs. This is not defined in the
+  // OpenAI API spec, but we include here for better UX in the frontend.
+  int32 total_items = 4;
 }
 
 message GetFileRequest {

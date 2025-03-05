@@ -16,11 +16,16 @@ export type File = {
 
 export type ListFilesRequest = {
   purpose?: string
+  after?: string
+  limit?: number
+  order?: string
 }
 
 export type ListFilesResponse = {
   object?: string
   data?: File[]
+  has_more?: boolean
+  total_items?: number
 }
 
 export type GetFileRequest = {
