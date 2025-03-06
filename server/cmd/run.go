@@ -111,7 +111,7 @@ func run(ctx context.Context, c *config.Config) error {
 
 	var s3Client server.S3Client
 	var pathPrefix string
-	if c.Debug.Standalone {
+	if c.Debug.Standalone || c.ObjectStore == nil {
 		s3Client = &server.NoopS3Client{}
 	} else {
 		s3conf := c.ObjectStore.S3
