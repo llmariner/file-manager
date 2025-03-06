@@ -87,8 +87,8 @@ type Config struct {
 	InternalGRPCPort      int  `yaml:"internalGrpcPort"`
 	EnableFileUpload      bool `yaml:"enableFileUpload"`
 
-	Database    db.Config         `yaml:"database"`
-	ObjectStore ObjectStoreConfig `yaml:"objectStore"`
+	Database    db.Config          `yaml:"database"`
+	ObjectStore *ObjectStoreConfig `yaml:"objectStore"`
 
 	AuthConfig  AuthConfig    `yaml:"auth"`
 	UsageSender sender.Config `yaml:"usageSender"`
@@ -116,8 +116,15 @@ func (c *Config) Validate() error {
 			return fmt.Errorf("sqlite path must be set")
 		}
 	} else {
-		if err := c.ObjectStore.Validate(); err != nil {
-			return fmt.Errorf("object store: %s", err)
+		if c.EnableFileUpload {
+			if c.ObjectStore == nil {
+				return fmt.Errorf("objectStore must be set when file upload is enabled")
+			}
+			if err := c.ObjectStore.Validate(); err != nil {
+				return fmt.Errorf("object store: %s", err)
+			}
+		} else if c.ObjectStore != nil {
+			return fmt.Errorf("objectStore must not be set when file upload is disabled")
 		}
 
 		if err := c.Database.Validate(); err != nil {
