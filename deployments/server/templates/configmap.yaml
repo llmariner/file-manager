@@ -11,6 +11,7 @@ data:
     workerServiceGrpcPort: {{ .Values.workerServiceGrpcPort }}
     internalGrpcPort: {{ .Values.internalGrpcPort }}
     enableFileUpload: {{ .Values.enableFileUpload }}
+    {{- if .Values.global.objectStore.s3.bucket }}
     objectStore:
       s3:
         endpointUrl: {{ .Values.global.objectStore.s3.endpointUrl }}
@@ -24,6 +25,7 @@ data:
           externalId: {{ .externalId }}
         {{- end }}
         {{- end }}
+    {{- end }}
     database:
       host: {{ .Values.global.database.host }}
       port: {{ .Values.global.database.port }}
