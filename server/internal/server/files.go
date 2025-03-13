@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"path/filepath"
+	"strings"
 	"time"
 
 	auv1 "github.com/llmariner/api-usage/api/v1"
@@ -274,6 +275,10 @@ func (s *S) CreateFileFromObjectPath(
 
 	if req.ObjectPath == "" {
 		return nil, status.Error(codes.InvalidArgument, "object_path is required")
+	}
+
+	if !strings.HasPrefix(req.ObjectPath, "s3://") {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid object path: %q. must start with 's3://'", req.ObjectPath)
 	}
 
 	if err := validatePurpose(req.Purpose); err != nil {

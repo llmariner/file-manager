@@ -221,7 +221,7 @@ func TestCreateFileFromObjectPath(t *testing.T) {
 
 	// Test successful creation
 	resp, err := srv.CreateFileFromObjectPath(ctx, &v1.CreateFileFromObjectPathRequest{
-		ObjectPath: "path/to/test-file.jsonl",
+		ObjectPath: "s3://bucket/path/to/test-file.jsonl",
 		Purpose:    purposeFineTune,
 	})
 	assert.NoError(t, err)
@@ -233,7 +233,7 @@ func TestCreateFileFromObjectPath(t *testing.T) {
 	// Verify the file exists in the store
 	f, err := st.GetFile(resp.Id, defaultProjectID)
 	assert.NoError(t, err)
-	assert.Equal(t, "path/to/test-file.jsonl", f.ObjectStorePath)
+	assert.Equal(t, "s3://bucket/path/to/test-file.jsonl", f.ObjectStorePath)
 
 	// Test missing object path
 	_, err = srv.CreateFileFromObjectPath(ctx, &v1.CreateFileFromObjectPathRequest{

@@ -22,6 +22,9 @@ message File {
 
   // object_store_path is the path to the object in the object storage. This is not in the OpenAI API spec,
   // but it is convenient for end users especiallly when they create a file with the CreateFileFromObjectPath RPC call.
+  //
+  // If the path starts with "s3://", it is the full path including the bucket name.
+  // Otherwise, path is the relative path to the bucket that is configured with job-manager-dispatcher.
   string object_store_path = 7;
 }
 
@@ -63,7 +66,7 @@ message DeleteFileResponse {
 }
 
 message CreateFileFromObjectPathRequest {
-  // The object path is the path to the object in the object storage.
+  // The object path is the path to the object in the object storage. The path must start from "s3://".
   string object_path = 1;
   string purpose = 2;
 }
@@ -106,6 +109,8 @@ message GetFilePathRequest {
 }
 
 message GetFilePathResponse {
+  // Path to the file in the object storage. If the path starts with "s3://", it is the full path including the bucket name.
+  // Otherwise, path is the relative path to the bucket that is configured with job-manager-dispatcher.
   string path = 1;
   string filename = 2;
 }

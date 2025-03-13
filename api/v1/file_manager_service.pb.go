@@ -34,6 +34,9 @@ type File struct {
 	Purpose   string `protobuf:"bytes,6,opt,name=purpose,proto3" json:"purpose,omitempty"`
 	// object_store_path is the path to the object in the object storage. This is not in the OpenAI API spec,
 	// but it is convenient for end users especiallly when they create a file with the CreateFileFromObjectPath RPC call.
+	//
+	// If the path starts with "s3://", it is the full path including the bucket name.
+	// Otherwise, path is the relative path to the bucket that is configured with job-manager-dispatcher.
 	ObjectStorePath string `protobuf:"bytes,7,opt,name=object_store_path,json=objectStorePath,proto3" json:"object_store_path,omitempty"`
 }
 
@@ -428,7 +431,7 @@ type CreateFileFromObjectPathRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The object path is the path to the object in the object storage.
+	// The object path is the path to the object in the object storage. The path must start from "s3://".
 	ObjectPath string `protobuf:"bytes,1,opt,name=object_path,json=objectPath,proto3" json:"object_path,omitempty"`
 	Purpose    string `protobuf:"bytes,2,opt,name=purpose,proto3" json:"purpose,omitempty"`
 }
@@ -531,6 +534,8 @@ type GetFilePathResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// Path to the file in the object storage. If the path starts with "s3://", it is the full path including the bucket name.
+	// Otherwise, path is the relative path to the bucket that is configured with job-manager-dispatcher.
 	Path     string `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
 	Filename string `protobuf:"bytes,2,opt,name=filename,proto3" json:"filename,omitempty"`
 }
