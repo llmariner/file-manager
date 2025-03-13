@@ -378,6 +378,8 @@ func toFileProto(f *store.File) *v1.File {
 		Filename:  f.Filename,
 		Object:    "file",
 		Purpose:   f.Purpose,
+
+		ObjectStorePath: f.ObjectStorePath,
 	}
 }
 
