@@ -200,7 +200,7 @@
       "properties": {
         "objectPath": {
           "type": "string",
-          "description": "The object path is the path to the object in the object storage."
+          "description": "The object path is the path to the object in the object storage. The path must start from \"s3://\"."
         },
         "purpose": {
           "type": "string"
@@ -246,7 +246,7 @@
         },
         "objectStorePath": {
           "type": "string",
-          "description": "object_store_path is the path to the object in the object storage. This is not in the OpenAI API spec,\nbut it is convenient for end users especiallly when they create a file with the CreateFileFromObjectPath RPC call."
+          "description": "object_store_path is the path to the object in the object storage. This is not in the OpenAI API spec,\nbut it is convenient for end users especiallly when they create a file with the CreateFileFromObjectPath RPC call.\n\nIf the path starts with \"s3://\", it is the full path including the bucket name.\nOtherwise, path is the relative path to the bucket that is configured with job-manager-dispatcher."
         }
       }
     },
@@ -254,7 +254,8 @@
       "type": "object",
       "properties": {
         "path": {
-          "type": "string"
+          "type": "string",
+          "description": "Path to the file in the object storage. If the path starts with \"s3://\", it is the full path including the bucket name.\nOtherwise, path is the relative path to the bucket that is configured with job-manager-dispatcher."
         },
         "filename": {
           "type": "string"
