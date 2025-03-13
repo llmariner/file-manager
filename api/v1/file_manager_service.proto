@@ -19,6 +19,10 @@ message File {
   string filename = 4;
   string object = 5;
   string purpose = 6;
+
+  // object_store_path is the path to the object in the object storage. This is not in the OpenAI API spec,
+  // but it is convenient for end users especiallly when they create a file with the CreateFileFromObjectPath RPC call.
+  string object_store_path = 7;
 }
 
 message ListFilesRequest {

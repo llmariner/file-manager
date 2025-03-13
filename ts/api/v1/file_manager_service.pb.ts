@@ -12,6 +12,7 @@ export type File = {
   filename?: string
   object?: string
   purpose?: string
+  object_store_path?: string
 }
 
 export type ListFilesRequest = {

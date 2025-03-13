@@ -243,6 +243,10 @@
         },
         "purpose": {
           "type": "string"
+        },
+        "objectStorePath": {
+          "type": "string",
+          "description": "object_store_path is the path to the object in the object storage. This is not in the OpenAI API spec,\nbut it is convenient for end users especiallly when they create a file with the CreateFileFromObjectPath RPC call."
         }
       }
     },
