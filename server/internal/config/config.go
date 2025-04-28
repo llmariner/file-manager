@@ -24,10 +24,11 @@ func (c *AssumeRoleConfig) validate() error {
 
 // S3Config is the S3 configuration.
 type S3Config struct {
-	EndpointURL string `yaml:"endpointUrl"`
-	Region      string `yaml:"region"`
-	Bucket      string `yaml:"bucket"`
-	PathPrefix  string `yaml:"pathPrefix"`
+	EndpointURL        string `yaml:"endpointUrl"`
+	Region             string `yaml:"region"`
+	InsecureSkipVerify bool   `yaml:"insecureSkipVerify"`
+	Bucket             string `yaml:"bucket"`
+	PathPrefix         string `yaml:"pathPrefix"`
 
 	AssumeRole *AssumeRoleConfig `yaml:"assumeRole"`
 }
