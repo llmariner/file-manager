@@ -17,7 +17,10 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-  - http:
+  - {{- if .Values.global.ingress.host }}
+    host: {{ .Values.global.ingress.host }}
+    {{- end }}
+    http:
       paths:
       - path: /v1/files
         pathType: Prefix
@@ -56,7 +59,10 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-  - http:
+  - {{- if .Values.global.ingress.host }}
+    host: {{ .Values.global.ingress.host }}
+    {{- end }}
+    http:
       paths:
       - path: /llmariner.files.server.v1.FilesWorkerService
         pathType: Prefix
