@@ -23,7 +23,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-      - name: file-manager-server
+      - name: fileManagerServer
         securityContext:
           {{- toYaml .Values.securityContext | nindent 10 }}
         image: "{{ .Values.image.repository }}:{{ default .Chart.Version .Values.version }}"
@@ -72,7 +72,7 @@ spec:
               key: {{ .secretAccessKeyKey }}
         {{- end }}
         {{- end }}
-        {{- with index .Values "file-manager-server" }}
+        {{- with .Values.fileManagerServer }}
           {{- with .env }}
         {{- toYaml . | nindent 8 }}
           {{- end }}

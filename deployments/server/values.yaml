@@ -312,7 +312,7 @@ securityContext:
 
 # Additional environment variables for the file-manager-server container.
 # +docs:property
-# file-manager-server:
+# fileManagerServer:
 #   env: []
 #   envFrom: []
 
